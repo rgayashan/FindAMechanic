@@ -12,7 +12,51 @@ class SplashViewController: UIViewController {
     
     // MARK: - Properties
     private let gradientLayer = CAGradientLayer()
+    private lazy var appLogoView: UIImageView = {
+        let view = UIImageView(image: UIImage(named: "spalsh-logo"))
+        view.contentMode = .scaleAspectFit
+        view.alpha = 0
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
+    private lazy var taglineLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Find Reliable Mechanics Near You"
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        label.textColor = .darkGray
+        label.textAlignment = .center
+        label.alpha = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private lazy var poweredByLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Powered By"
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.textColor = .darkGray
+        label.alpha = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private lazy var vemasLogoView: UIImageView = {
+        let view = UIImageView(image: UIImage(named: "vemas"))
+        view.contentMode = .scaleAspectFit
+        view.alpha = 0
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private lazy var indicatorContainer: UIView = {
+        let view = UIView()
+        view.alpha = 0
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupBackground()
@@ -38,44 +82,7 @@ class SplashViewController: UIViewController {
     }
     
     private func setupUI() {
-        // App logo
-        let appLogoView = UIImageView(image: UIImage(named: "spalsh-logo"))
-        appLogoView.contentMode = .scaleAspectFit
-        appLogoView.translatesAutoresizingMaskIntoConstraints = false
-        appLogoView.alpha = 0
-        view.addSubview(appLogoView)
-        
-        // App tagline
-        let taglineLabel = UILabel()
-        taglineLabel.text = "Find Reliable Mechanics Near You"
-        taglineLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        taglineLabel.textColor = .darkGray
-        taglineLabel.textAlignment = .center
-        taglineLabel.translatesAutoresizingMaskIntoConstraints = false
-        taglineLabel.alpha = 0
-        view.addSubview(taglineLabel)
-        
-        // Powered By label
-        let poweredByLabel = UILabel()
-        poweredByLabel.text = "Powered By"
-        poweredByLabel.font = UIFont.systemFont(ofSize: 14)
-        poweredByLabel.textColor = .darkGray
-        poweredByLabel.translatesAutoresizingMaskIntoConstraints = false
-        poweredByLabel.alpha = 0
-        view.addSubview(poweredByLabel)
-        
-        // VEMAS logo
-        let vemasLogoView = UIImageView(image: UIImage(named: "vemas"))
-        vemasLogoView.contentMode = .scaleAspectFit
-        vemasLogoView.translatesAutoresizingMaskIntoConstraints = false
-        vemasLogoView.alpha = 0
-        view.addSubview(vemasLogoView)
-        
-        // Create a container for the activity indicator
-        let indicatorContainer = UIView()
-        indicatorContainer.translatesAutoresizingMaskIntoConstraints = false
-        indicatorContainer.alpha = 0
-        view.addSubview(indicatorContainer)
+        [appLogoView, taglineLabel, indicatorContainer, poweredByLabel, vemasLogoView].forEach(view.addSubview)
         
         // Setup constraints with better spacing
         NSLayoutConstraint.activate([
@@ -102,135 +109,25 @@ class SplashViewController: UIViewController {
             vemasLogoView.widthAnchor.constraint(equalToConstant: 120)
         ])
         
-        // Start the animation sequence
-        executeAnimationSequence(
+        SplashAnimator.executeAnimationSequence(
             appLogo: appLogoView,
             tagline: taglineLabel,
             indicatorContainer: indicatorContainer,
             poweredBy: poweredByLabel,
             vemasLogo: vemasLogoView
-        )
-    }
-    
-    // MARK: - Animation Methods
-    private func executeAnimationSequence(appLogo: UIImageView, tagline: UILabel, indicatorContainer: UIView, poweredBy: UILabel, vemasLogo: UIImageView) {
-        
-        // Prepare initial transforms
-        appLogo.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
-        vemasLogo.transform = CGAffineTransform(translationX: 0, y: 30)
-        tagline.transform = CGAffineTransform(translationX: -20, y: 0)
-        
-        // 1. Logo animation with bounce effect
-        UIView.animate(withDuration: 0.9, delay: 0.3, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.2, options: .curveEaseOut, animations: {
-            appLogo.alpha = 1.0
-            appLogo.transform = CGAffineTransform.identity
-        }) { _ in
-            // Add subtle pulse animation to the logo
-            self.addPulseAnimation(to: appLogo, duration: 2.0)
-            
-            // 2. Animate in the tagline with slide effect
-            UIView.animate(withDuration: 0.7, delay: 0.1, options: .curveEaseOut, animations: {
-                tagline.alpha = 1.0
-                tagline.transform = CGAffineTransform.identity
-            }) { _ in
-                // 3. Show and start the activity indicator
-                UIView.animate(withDuration: 0.5, animations: {
-                    indicatorContainer.alpha = 1.0
-                }) { _ in
-                    // Show the loading indicator using our new class
-                    LoadingIndicator.show(in: indicatorContainer, style: .medium, backgroundColor: .clear)
-                    
-                    // 4. After a short delay, animate in the "Powered By" text
-                    UIView.animate(withDuration: 0.6, delay: 0.6, options: .curveEaseIn, animations: {
-                        poweredBy.alpha = 1.0
-                    }) { _ in
-                        // 5. Finally, animate in the VEMAS logo with a nice spring effect
-                        UIView.animate(withDuration: 0.8, delay: 0.2, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.3, options: .curveEaseOut, animations: {
-                            vemasLogo.alpha = 1.0
-                            vemasLogo.transform = CGAffineTransform.identity
-                        }) { _ in
-                            // Add subtle rotating shine effect to VEMAS logo
-                            self.addShineEffect(to: vemasLogo)
-                            
-                            // Wait and then transition to main screen
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-                                self.transitionToMainScreen(indicatorContainer: indicatorContainer)
-                            }
-                        }
-                    }
-                }
-            }
+        ) { [weak self] in
+            self?.transitionToMainScreen()
         }
     }
     
-    private func addPulseAnimation(to view: UIView, duration: Double) {
-        let pulseAnimation = CABasicAnimation(keyPath: "transform.scale")
-        pulseAnimation.duration = duration
-        pulseAnimation.fromValue = 1.0
-        pulseAnimation.toValue = 1.05
-        pulseAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-        pulseAnimation.autoreverses = true
-        pulseAnimation.repeatCount = 1
-        view.layer.add(pulseAnimation, forKey: "pulse")
-    }
-    
-    private func addShineEffect(to view: UIView) {
-        // Create a shine layer
-        let shineLayer = CALayer()
-        shineLayer.backgroundColor = UIColor.white.withAlphaComponent(0.3).cgColor
-        shineLayer.frame = CGRect(x: -view.frame.width, y: 0, width: view.frame.width/3, height: view.frame.height)
-        shineLayer.transform = CATransform3DMakeRotation(CGFloat.pi/4, 0, 0, 1)
-        view.layer.mask = nil
-        view.layer.addSublayer(shineLayer)
+    private func transitionToMainScreen() {
+        let tabBarController = TabBarConfigurator.configure()
         
-        // Animate the shine layer
-        let animation = CABasicAnimation(keyPath: "position.x")
-        animation.fromValue = -view.frame.width
-        animation.toValue = view.frame.width * 2
-        animation.duration = 1.5
-        animation.timingFunction = CAMediaTimingFunction(name: .easeIn)
-        
-        shineLayer.add(animation, forKey: "shineEffect")
-        
-        // Remove the shine layer after animation completes
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            shineLayer.removeFromSuperlayer()
-        }
-    }
-    
-    private func transitionToMainScreen(indicatorContainer: UIView) {
-        let tabBarController = UITabBarController()
-        
-        // Setup tab bar appearance
-        let appearance = UITabBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = UIColor(named: "splash-bg")?.withAlphaComponent(0.95)
-        UITabBar.appearance().standardAppearance = appearance
-        if #available(iOS 15.0, *) {
-            UITabBar.appearance().scrollEdgeAppearance = appearance
-        }
-        
-        // Configure Mechanic List tab
-        let mechanicListVC = MechanicListViewController()
-        let mechanicListNav = UINavigationController(rootViewController: mechanicListVC)
-        mechanicListNav.tabBarItem = UITabBarItem(
-            title: "Mechanics",
-            image: UIImage(systemName: "wrench"),
-            selectedImage: UIImage(systemName: "wrench.fill")
-        )
-        
-        tabBarController.viewControllers = [mechanicListNav]
-        
-        // Create a smooth transition to main app
-        tabBarController.modalTransitionStyle = .crossDissolve
-        tabBarController.modalPresentationStyle = .fullScreen
-        
-        // Hide loading indicator
-        LoadingIndicator.hide(animated: true) {
-            UIView.animate(withDuration: 0.2, animations: {
-                indicatorContainer.alpha = 0
-            }) { _ in
-                self.present(tabBarController, animated: true)
+        LoadingIndicator.hide(animated: true) { [weak self] in
+            UIView.animate(withDuration: 0.2) {
+                self?.indicatorContainer.alpha = 0
+            } completion: { _ in
+                self?.present(tabBarController, animated: true)
             }
         }
     }
