@@ -40,4 +40,14 @@ extension InquiryDelegateHandler: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         formHandler.updateMessage(message: textView.text)
     }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        // This will ensure keyboard notifications are triggered
+        // The keyboard will show and the container will adjust position
+    }
+    
+    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+        // Ensure the view scrolls up when this text view becomes active
+        return true
+    }
 } 

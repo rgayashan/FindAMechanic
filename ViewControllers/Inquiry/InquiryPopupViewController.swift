@@ -17,6 +17,7 @@ class InquiryPopupViewController: UIViewController {
     private var formHandler: InquiryFormHandler!
     private var delegateHandler: InquiryDelegateHandler!
     private var viewSetup: InquiryViewSetup!
+    private var keyboardHandler: InquiryKeyboardHandler!
     private var datePicker = UIDatePicker()
     weak var delegate: InquiryPopupDelegate?
     
@@ -24,63 +25,60 @@ class InquiryPopupViewController: UIViewController {
     private let containerView = InquiryUIFactory.createContainerView()
     private let titleLabel = InquiryUIFactory.createTitleLabel(title: "Celtic Car Sound")
     private let closeButton = InquiryUIFactory.createCloseButton()
-    
     private let vehicleRegistrationTextField = InquiryUIFactory.createTextField(placeholder: "Enter Vehicle Registration No")
     private let nameTextField = InquiryUIFactory.createTextField(placeholder: "Enter Name")
     private let emailTextField = InquiryUIFactory.createTextField(placeholder: "Enter Email", keyboardType: .emailAddress)
     private let phoneNumberTextField = InquiryUIFactory.createTextField(placeholder: "Enter Phone Number", keyboardType: .phonePad)
     private let datePickerField = InquiryUIFactory.createTextField(placeholder: "Select Date")
     private let messageTextView = InquiryUIFactory.createMessageTextView()
-    
     private lazy var inquiryButton = InquiryUIFactory.createButton(title: "Inquiry", backgroundColor: .systemBlue, isEnabled: false)
     private lazy var closeActionButton = InquiryUIFactory.createButton(title: "Close", backgroundColor: .systemGray)
     
-    // MARK: - Lifecycle
+    // MARK: - Lifecycle & Setup
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupComponents()
-    }
-    
-    // MARK: - Setup
-    private func setupComponents() {
+        
         // Initialize handlers
         formHandler = InquiryFormHandler(inquiryButton: inquiryButton)
         delegateHandler = InquiryDelegateHandler(formHandler: formHandler, viewController: self)
         viewSetup = InquiryViewSetup(viewController: self, containerView: containerView)
+        keyboardHandler = InquiryKeyboardHandler(viewController: self, containerView: containerView)
         
-        setupView()
-        setupConstraints()
-        setupActions()
+        // Setup UI
+        setupUIComponents()
+    }
+    
+    private func setupUIComponents() {
+        // Base view and container setup
+        viewSetup.setupBaseView()
+        InquiryLayoutConstraints.setupContainerConstraints(container: containerView, view: view)
+        
+        // Configure and setup fields
+        viewSetup.setupFields(
+            titleLabel: titleLabel,
+            closeButton: closeButton,
+            fields: getFieldsConfig(),
+            messageTextView: messageTextView,
+            buttons: [inquiryButton, closeActionButton]
+        )
+        
+        // Setup actions and delegates
+        setupActionsAndDelegates()
         setupDatePicker()
     }
     
-    private func setupView() {
-        viewSetup.setupBaseView()
-        
-        // Configure fields for setup
-        let fields: [(UITextField, String)] = [
+    private func getFieldsConfig() -> [(UITextField, String)] {
+        return [
             (vehicleRegistrationTextField, "Vehicle Registration No"),
             (nameTextField, "Name"),
             (emailTextField, "Email address"),
             (phoneNumberTextField, "Phone Number"),
             (datePickerField, "Select Date")
         ]
-        
-        viewSetup.setupFields(
-            titleLabel: titleLabel,
-            closeButton: closeButton,
-            fields: fields,
-            messageTextView: messageTextView,
-            buttons: [inquiryButton, closeActionButton]
-        )
     }
     
-    private func setupConstraints() {
-        InquiryLayoutConstraints.setupContainerConstraints(container: containerView, view: view)
-    }
-    
-    private func setupActions() {
-        // Setup text field delegates and targets
+    private func setupActionsAndDelegates() {
+        // Setup text field delegates
         let textFields = [vehicleRegistrationTextField, nameTextField, emailTextField, phoneNumberTextField]
         delegateHandler.setupTextFieldActions(fields: textFields, target: self, action: #selector(textFieldDidChange(_:)))
         
@@ -97,15 +95,12 @@ class InquiryPopupViewController: UIViewController {
             doneTarget: self, doneAction: #selector(datePickerDone),
             cancelTarget: self, cancelAction: #selector(datePickerCancel)
         )
-        
         datePickerField.inputView = datePicker
         datePickerField.inputAccessoryView = toolbar
     }
     
     // MARK: - Actions
-    @objc private func closeButtonTapped() {
-        dismiss(animated: true)
-    }
+    @objc private func closeButtonTapped() { dismiss(animated: true) }
     
     @objc private func inquiryButtonTapped() {
         let alert = InquiryUIFactory.createConfirmationAlert(
@@ -121,9 +116,7 @@ class InquiryPopupViewController: UIViewController {
         present(alert, animated: true)
     }
     
-    @objc private func textFieldDidChange(_ textField: UITextField) {
-        updateFormData()
-    }
+    @objc private func textFieldDidChange(_ textField: UITextField) { updateFormData() }
     
     @objc private func datePickerDone() {
         datePickerField.text = formHandler.formatDate(date: datePicker.date)
@@ -131,9 +124,7 @@ class InquiryPopupViewController: UIViewController {
         view.endEditing(true)
     }
     
-    @objc private func datePickerCancel() {
-        view.endEditing(true)
-    }
+    @objc private func datePickerCancel() { view.endEditing(true) }
     
     // MARK: - Public Helpers
     func updateFormData() {
@@ -144,5 +135,15 @@ class InquiryPopupViewController: UIViewController {
             phoneNumber: phoneNumberTextField.text,
             message: messageTextView.text
         )
+    }
+    
+    func getActiveField() -> UIView? {
+        if messageTextView.isFirstResponder { return messageTextView }
+        else if vehicleRegistrationTextField.isFirstResponder { return vehicleRegistrationTextField }
+        else if nameTextField.isFirstResponder { return nameTextField }
+        else if emailTextField.isFirstResponder { return emailTextField }
+        else if phoneNumberTextField.isFirstResponder { return phoneNumberTextField }
+        else if datePickerField.isFirstResponder { return datePickerField }
+        return nil
     }
 }
