@@ -14,13 +14,13 @@ class MechanicTableViewCell: UITableViewCell {
     weak var delegate: MechanicTableViewCellDelegate?
     
     // MARK: - UI Components
-    private let containerView = UIView()
-    private let logoImageView = UIImageView()
-    private let nameLabel = UILabel()
-    private let addressLine1Label = UILabel()
-    private let addressLine2Label = UILabel()
-    private let phoneLabel = UILabel()
-    private let bookButton = UIButton(type: .system)
+    private let containerView = MechanicCellComponents.createContainerView()
+    private let logoImageView = MechanicCellComponents.createLogoImageView()
+    private let nameLabel = MechanicCellComponents.createNameLabel()
+    private let addressLine1Label = MechanicCellComponents.createAddressLabel()
+    private let addressLine2Label = MechanicCellComponents.createAddressLabel()
+    private let phoneLabel = MechanicCellComponents.createPhoneLabel()
+    private let bookButton = MechanicCellComponents.createBookButton()
     
     // MARK: - Initialization
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -37,54 +37,11 @@ class MechanicTableViewCell: UITableViewCell {
         selectionStyle = .none
         contentView.backgroundColor = .systemGroupedBackground
         
-        // Container View
-        containerView.translatesAutoresizingMaskIntoConstraints = false
-        containerView.backgroundColor = .white
-        containerView.layer.cornerRadius = 8
-        containerView.layer.borderWidth = 0.5
-        containerView.layer.borderColor = UIColor.systemGray4.cgColor
         contentView.addSubview(containerView)
+        [logoImageView, nameLabel, addressLine1Label, addressLine2Label, phoneLabel, bookButton]
+            .forEach(containerView.addSubview)
         
-        // Logo Image View
-        logoImageView.translatesAutoresizingMaskIntoConstraints = false
-        logoImageView.contentMode = .scaleAspectFit
-        logoImageView.backgroundColor = .systemGray6
-        logoImageView.layer.cornerRadius = 6
-        logoImageView.clipsToBounds = true
-        containerView.addSubview(logoImageView)
-        
-        // Name Label
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        nameLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
-        nameLabel.textColor = .black
-        containerView.addSubview(nameLabel)
-        
-        // Address Line 1
-        addressLine1Label.translatesAutoresizingMaskIntoConstraints = false
-        addressLine1Label.font = UIFont.systemFont(ofSize: 14)
-        addressLine1Label.textColor = .darkGray
-        containerView.addSubview(addressLine1Label)
-        
-        // Address Line 2
-        addressLine2Label.translatesAutoresizingMaskIntoConstraints = false
-        addressLine2Label.font = UIFont.systemFont(ofSize: 14)
-        addressLine2Label.textColor = .darkGray
-        containerView.addSubview(addressLine2Label)
-        
-        // Phone Label
-        phoneLabel.translatesAutoresizingMaskIntoConstraints = false
-        phoneLabel.font = UIFont.systemFont(ofSize: 14)
-        phoneLabel.textColor = .darkGray
-        containerView.addSubview(phoneLabel)
-        
-        // Book Button
-        bookButton.translatesAutoresizingMaskIntoConstraints = false
-        bookButton.setTitle("Book Online", for: .normal)
-        bookButton.setTitleColor(.white, for: .normal)
-        bookButton.backgroundColor = .systemBlue
-        bookButton.layer.cornerRadius = 8
         bookButton.addTarget(self, action: #selector(bookButtonTapped), for: .touchUpInside)
-        containerView.addSubview(bookButton)
         
         setupConstraints()
     }
@@ -147,7 +104,7 @@ class MechanicTableViewCell: UITableViewCell {
         }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.addButtonPulseAnimation()
+            MechanicCellAnimator.applyButtonAnimation(to: self.bookButton)
         }
     }
     
@@ -164,85 +121,22 @@ class MechanicTableViewCell: UITableViewCell {
     
     // MARK: - Animation Methods
     func animateOnAppear(withDelay delay: Double = 0) {
-        // Initial state
-        alpha = 0
-        transform = CGAffineTransform(translationX: -20, y: 0)
-        containerView.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
-        
-        // Spring animation
-        UIView.animate(withDuration: 0.5,
-                       delay: delay,
-                       usingSpringWithDamping: 0.8,
-                       initialSpringVelocity: 0.2,
-                       options: .curveEaseOut,
-                       animations: {
-            self.alpha = 1
-            self.transform = .identity
-            self.containerView.transform = .identity
-        })
-    }
-    
-    private func addButtonPulseAnimation() {
-        // First fade in with a slight bounce
-        bookButton.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
-        bookButton.alpha = 0
-        
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.6,
-                      initialSpringVelocity: 0.5, options: [], animations: {
-            self.bookButton.transform = .identity
-            self.bookButton.alpha = 1
-        }) { _ in
-            // Then do a subtle pulse animation
-            let pulseAnimation = CAKeyframeAnimation(keyPath: "transform.scale")
-            pulseAnimation.values = [1.0, 1.06, 1.0]
-            pulseAnimation.keyTimes = [0, 0.5, 1]
-            pulseAnimation.duration = 1.2
-            pulseAnimation.timingFunctions = [
-                CAMediaTimingFunction(name: .easeInEaseOut),
-                CAMediaTimingFunction(name: .easeInEaseOut)
-            ]
-            pulseAnimation.repeatCount = 2
-            self.bookButton.layer.add(pulseAnimation, forKey: "pulse")
-        }
+        MechanicCellAnimator.applyAppearAnimation(to: self, containerView: containerView, withDelay: delay)
     }
     
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         super.setHighlighted(highlighted, animated: animated)
         
         if animated {
-            UIView.animate(withDuration: 0.1) {
-                self.containerView.transform = highlighted ?
-                CGAffineTransform(scaleX: 0.98, y: 0.98) : .identity
-                self.containerView.backgroundColor = highlighted ?
-                UIColor.systemGray6 : .white
-            }
+            MechanicCellAnimator.applyHighlightAnimation(to: containerView, isHighlighted: highlighted)
         }
     }
     
     // MARK: - Actions
     @objc private func bookButtonTapped() {
-        // Quick button feedback
-        let feedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
-        feedbackGenerator.impactOccurred()
+        guard let mechanic = self.mechanic else { return }
         
-        // Animated button response
-        UIView.animateKeyframes(withDuration: 0.4, delay: 0, options: [], animations: {
-            // First shrink
-            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.2) {
-                self.bookButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
-            }
-            
-            // Then expand slightly beyond normal
-            UIView.addKeyframe(withRelativeStartTime: 0.2, relativeDuration: 0.2) {
-                self.bookButton.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
-            }
-            
-            // Then back to normal
-            UIView.addKeyframe(withRelativeStartTime: 0.4, relativeDuration: 0.2) {
-                self.bookButton.transform = .identity
-            }
-        }) { _ in
-            guard let mechanic = self.mechanic else { return }
+        MechanicCellAnimator.applyTapAnimation(to: bookButton) {
             self.delegate?.didTapBookButton(for: mechanic)
         }
     }
