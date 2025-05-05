@@ -12,6 +12,7 @@ class LoadingRefreshControl: UIRefreshControl {
     private let loadingView = UIView()
     private let spinner = UIActivityIndicatorView(style: .medium)
     private let label = UILabel()
+    private var defaultText = "Loading mechanics..."
     
     override init() {
         super.init()
@@ -28,7 +29,7 @@ class LoadingRefreshControl: UIRefreshControl {
         backgroundColor = .clear
         
         // Setup container view
-        loadingView.backgroundColor = UIColor(white: 0.95, alpha: 0.8)
+        loadingView.backgroundColor = UIColor(white: 1, alpha: 0.8)
         loadingView.layer.cornerRadius = 12
         loadingView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(loadingView)
@@ -40,7 +41,7 @@ class LoadingRefreshControl: UIRefreshControl {
         loadingView.addSubview(spinner)
         
         // Setup label
-        label.text = "Loading mechanics..."
+        label.text = defaultText
         label.font = UIFont.systemFont(ofSize: 13, weight: .medium)
         label.textColor = .darkGray
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -65,7 +66,14 @@ class LoadingRefreshControl: UIRefreshControl {
     }
     
     override func beginRefreshing() {
+        beginRefreshing(withText: defaultText)
+    }
+    
+    func beginRefreshing(withText text: String) {
         super.beginRefreshing()
+        
+        // Update label text
+        label.text = text
         
         // Initial state for animations
         loadingView.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
