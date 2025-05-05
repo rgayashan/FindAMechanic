@@ -105,11 +105,6 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		07EDF5FD2DC694660010D674 /* View */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = View;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,7 +138,6 @@
 		077141832DBBBF920013FC1A = {
 			isa = PBXGroup;
 			children = (
-				07EDF5FD2DC694660010D674 /* View */,
 				077141FD2DBCFD120013FC1A /* README.md */,
 				077141E92DBBC3A50013FC1A /* Resources */,
 				077141D62DBBC3340013FC1A /* Utilities */,
@@ -218,7 +212,6 @@
 				077141D52DBBC3190013FC1A /* Services */,
 				077141D62DBBC3340013FC1A /* Utilities */,
 				077141E92DBBC3A50013FC1A /* Resources */,
-				07EDF5FD2DC694660010D674 /* View */,
 			);
 			name = FindAMechanic;
 			productName = "Find a Mechanic";

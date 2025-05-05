@@ -3,10 +3,14 @@ import UIKit
 class InquiryDelegateHandler: NSObject {
     private let formHandler: InquiryFormHandler
     private weak var viewController: UIViewController?
+    private var validationDisplay: InquiryValidationDisplay?
+    private var fieldValidationTypes: [UITextField: ValidationFieldType] = [:]
     
-    init(formHandler: InquiryFormHandler, viewController: UIViewController? = nil) {
+    init(formHandler: InquiryFormHandler, viewController: UIViewController? = nil, validationDisplay: InquiryValidationDisplay? = nil) {
         self.formHandler = formHandler
         self.viewController = viewController
+        self.validationDisplay = validationDisplay
+        super.init()
     }
     
     // Helper method to setup targets and delegates
@@ -20,6 +24,17 @@ class InquiryDelegateHandler: NSObject {
             field.delegate = self
         }
     }
+    
+    func setValidationType(for textField: UITextField, type: ValidationFieldType) {
+        fieldValidationTypes[textField] = type
+    }
+    
+    private func validateTextField(_ textField: UITextField) {
+        guard let validationType = fieldValidationTypes[textField] else { return }
+        
+        let result = formHandler.validateField(type: validationType, text: textField.text ?? "")
+        validationDisplay?.showValidationResult(for: textField, result: result)
+    }
 }
 
 // MARK: - UITextFieldDelegate
@@ -27,11 +42,19 @@ extension InquiryDelegateHandler: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         guard let vc = viewController as? InquiryPopupViewController else { return }
         vc.updateFormData()
+        validateTextField(textField)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        // Clear validation error when starting to edit
+        if let validationType = fieldValidationTypes[textField] {
+            validationDisplay?.showValidationResult(for: textField, result: (isValid: true, errorMessage: nil))
+        }
     }
 }
 
