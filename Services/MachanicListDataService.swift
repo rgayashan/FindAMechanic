@@ -11,75 +11,137 @@ enum DataError: Error {
     case networkError
     case decodingError
     case noData
+    case apiError(String)
+}
+
+// API Response Models
+struct APIResponse: Codable {
+    let statusCode: Int
+    let result: PagedResponseWrapper
+}
+
+struct PagedResponseWrapper: Codable {
+    let type: String
+    let page: Int
+    let pageSize: Int
+    let totalPages: Int
+    let result: [TenantResponse]
+    
+    enum CodingKeys: String, CodingKey {
+        case type = "$type"
+        case page
+        case pageSize
+        case totalPages
+        case result
+    }
+}
+
+struct TenantResponse: Codable {
+    let businessName: String
+    let phoneNumber: String
+    let logo: String?
+    let billStreetNumber: String?
+    let billStreetName: String?
+    let billCity: String?
+    let billPostalCode: String?
+    let billRegion: String?
+    let billCountry: Country?
+    let billLatitude: Double
+    let billLongitude: Double
+    let id: Int
+}
+
+struct Country: Codable {
+    let code: String?
 }
 
 class MachanicListDataService {
     static let shared = MachanicListDataService()
+    private let baseURL = "https://findamechanic.com.au"
+    private let authToken = "VGLkM6Y+WJ2Wm7VUBsjS1A=="
     
     private init() {}
     
-    // For demo purposes, this generates mock data
-    // In a real app, you would make API calls here
-    func getMechanics(page: Int, itemsPerPage: Int, completion: @escaping (Result<[Mechanic], DataError>) -> Void) {
-        // Sample mechanics data - in a real app, this would come from an API
-        let sampleMechanics = [
-            Mechanic(id: "1", name: "Dhana Auto Care Pty Ltd",
-                    addressLine1: "2, Talara",
-                    addressLine2: "Mango Hill, 4509, QLD",
-                    phone: "+61 481 331 800",
-                    logoUrl: "https://picsum.photos/200/300",
-                    latitude: -27.2340,
-                    longitude: 153.0234,
-                    specialties: ["General Repairs", "Electrical"],
-                    rating: 4.7),
-            
-            Mechanic(id: "2", name: "Albert's Auto Electrical",
-                    addressLine1: "3/41, O'Connell Street",
-                    addressLine2: "Smithfield, 2164, NSW",
-                    phone: "+61 421 667 118",
-                    logoUrl: "https://picsum.photos/200/300",
-                    latitude: -33.8442,
-                    longitude: 150.9431,
-                    specialties: ["Electrical", "Diagnostics"],
-                    rating: 4.5),
-                    
-            Mechanic(id: "3", name: "Western Pit Stop Automotive Pty Ltd",
-                    addressLine1: "10/11, Bowmans Road",
-                    addressLine2: "Kings Park, 2148, NSW",
-                    phone: "02 967 6 8 589",
-                    logoUrl: "https://picsum.photos/200/300",
-                    latitude: -33.7442,
-                    longitude: 150.9131,
-                    specialties: ["General Service", "Brakes", "Suspension"],
-                    rating: 4.2),
-                    
-            Mechanic(id: "4", name: "Grease Monkey Automotive",
-                    addressLine1: "7 398, Marion st",
-                    addressLine2: "Condell Park, 2200, NSW",
-                    phone: "+61 297 961 616",
-                    logoUrl: nil,
-                    latitude: -33.9242,
-                    longitude: 151.0131,
-                    specialties: ["Engine Repair", "Transmissions"],
-                    rating: 4.8)
+    func getMechanics(page: Int, itemsPerPage: Int, search: String = "", completion: @escaping (Result<[Mechanic], DataError>) -> Void) {
+        let endpoint = "api/Tenants"
+        let queryItems = [
+            URLQueryItem(name: "Search", value: search),
+            URLQueryItem(name: "pageSize", value: "\(itemsPerPage)"),
+            URLQueryItem(name: "PageNumber", value: "\(page)")
         ]
         
-        // Calculate the starting and ending indices for the requested page
-        let startIndex = (page - 1) * itemsPerPage
-        let endIndex = min(startIndex + itemsPerPage, sampleMechanics.count)
-        
-        // Check if start index is valid
-        guard startIndex < sampleMechanics.count else {
-            completion(.success([]))
+        guard var urlComponents = URLComponents(string: "\(baseURL)/\(endpoint)") else {
+            completion(.failure(.networkError))
             return
         }
         
-        // Get the requested subset of mechanics
-        let pageMechanics = Array(sampleMechanics[startIndex..<endIndex])
+        urlComponents.queryItems = queryItems
         
-        // Simulate network delay
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            completion(.success(pageMechanics))
+        guard let url = urlComponents.url else {
+            completion(.failure(.networkError))
+            return
         }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue("\(authToken)", forHTTPHeaderField: "Authorization")
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Network error: \(error)")
+                completion(.failure(.networkError))
+                return
+            }
+            
+            guard let data = data else {
+                completion(.failure(.noData))
+                return
+            }
+            
+            do {
+                let apiResponse = try JSONDecoder().decode(APIResponse.self, from: data)
+                print("apiResponse \(apiResponse)")
+                let mechanics = apiResponse.result.result.map { tenant in
+                    let addressLine1 = [tenant.billStreetNumber, tenant.billStreetName]
+                        .compactMap { $0 }
+                        .joined(separator: ", ")
+                    
+                    let addressLine2 = [tenant.billCity, tenant.billPostalCode, tenant.billRegion]
+                        .compactMap { $0 }
+                        .joined(separator: ", ")
+                    
+                    return Mechanic(
+                        id: String(tenant.id),
+                        name: tenant.businessName,
+                        addressLine1: addressLine1.isEmpty ? "Address not available" : addressLine1,
+                        addressLine2: addressLine2.isEmpty ? "" : addressLine2,
+                        phone: tenant.phoneNumber,
+                        logoUrl: tenant.logo,
+                        latitude: tenant.billLatitude,
+                        longitude: tenant.billLongitude,
+                        specialties: [], // API doesn't provide specialties
+                        rating: 0.0 // API doesn't provide rating
+                    )
+                }
+                completion(.success(mechanics))
+            } catch {
+                print("Decoding error: \(error)")
+                if let decodingError = error as? DecodingError {
+                    switch decodingError {
+                    case .keyNotFound(let key, let context):
+                        print("Key '\(key)' not found: \(context.debugDescription)")
+                    case .typeMismatch(let type, let context):
+                        print("Type '\(type)' mismatch: \(context.debugDescription)")
+                    case .valueNotFound(let type, let context):
+                        print("Value of type '\(type)' not found: \(context.debugDescription)")
+                    case .dataCorrupted(let context):
+                        print("Data corrupted: \(context.debugDescription)")
+                    @unknown default:
+                        print("Unknown decoding error: \(decodingError)")
+                    }
+                }
+                completion(.failure(.decodingError))
+            }
+        }.resume()
     }
 }
