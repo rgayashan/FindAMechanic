@@ -57,8 +57,8 @@ struct Country: Codable {
 
 class MachanicListDataService {
     static let shared = MachanicListDataService()
-    private let baseURL = "https://findamechanic.com.au"
-    private let authToken = "VGLkM6Y+WJ2Wm7VUBsjS1A=="
+    private let baseURL = APIConstants.baseURL
+    private let authToken = APIConstants.authToken
     
     private init() {}
     
