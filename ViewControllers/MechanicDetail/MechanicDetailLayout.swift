@@ -100,13 +100,13 @@ class MechanicDetailLayout {
             hoursHeaderLabel.heightAnchor.constraint(equalToConstant: 50),
             
             // Hours table
-            hoursTableView.topAnchor.constraint(equalTo: hoursHeaderLabel.bottomAnchor),
-            hoursTableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            hoursTableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            hoursTableView.heightAnchor.constraint(equalToConstant: 280),
+            hoursTableView.topAnchor.constraint(equalTo: hoursHeaderLabel.bottomAnchor, constant: padding),
+            hoursTableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
+            hoursTableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
+            hoursTableView.heightAnchor.constraint(equalToConstant: 44 * 7 + 1), // Height for 7 days plus border
             
             // Location header
-            locationHeaderLabel.topAnchor.constraint(equalTo: hoursTableView.bottomAnchor, constant: padding),
+            locationHeaderLabel.topAnchor.constraint(equalTo: hoursTableView.bottomAnchor, constant: padding * 2),
             locationHeaderLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             locationHeaderLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             locationHeaderLabel.heightAnchor.constraint(equalToConstant: 50),

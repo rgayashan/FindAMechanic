@@ -9,22 +9,28 @@
 import Foundation
 import MapKit
 
-enum DataServiceError: Error {
-    case networkError
-    case decodingError
-    case notFound
-    case unknown
+enum DataServiceError: LocalizedError {
+    case networkError(String)
+    case decodingError(String)
+    case notFound(String)
+    case invalidResponse(String)
+    case invalidData(String)
+    case unknown(String)
     
-    var localizedDescription: String {
+    var errorDescription: String? {
         switch self {
-        case .networkError:
-            return "Network connection error. Please check your internet connection."
-        case .decodingError:
-            return "Error processing data from the server."
-        case .notFound:
-            return "The requested mechanic could not be found."
-        case .unknown:
-            return "An unknown error occurred."
+        case .networkError(let details):
+            return "Network connection error: \(details)"
+        case .decodingError(let details):
+            return "Error processing data: \(details)"
+        case .notFound(let details):
+            return "Resource not found: \(details)"
+        case .invalidResponse(let details):
+            return "Invalid response: \(details)"
+        case .invalidData(let details):
+            return "Invalid data: \(details)"
+        case .unknown(let details):
+            return "An unknown error occurred: \(details)"
         }
     }
 }
@@ -33,124 +39,316 @@ class MachanicDetailsDataService {
     // Singleton instance
     static let shared = MachanicDetailsDataService()
     
+    private let baseURL = APIConstants.baseURL
+    private let authToken = APIConstants.authToken
+    
     private init() {}
     
-    // MARK: - Mechanic Details
-    func getMechanicDetails(mechanicID: String, completion: @escaping (Result<MechanicDetails, Error>) -> Void) {
-        // In a real app, this would make a network request to fetch mechanic details
-        // For demonstration, we'll use mock data
+    // MARK: - Helper Methods
+    private func createRequest(for endpoint: String) -> URLRequest {
+        let url = URL(string: "\(baseURL)/\(endpoint)")!
+        var request = URLRequest(url: url)
+        request.addValue(authToken, forHTTPHeaderField: "Authorization")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        return request
+    }
+    
+    private func validateResponse(_ response: URLResponse, for endpoint: String) throws {
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw DataServiceError.invalidResponse("Non-HTTP response received for \(endpoint)")
+        }
         
-        // Simulate network delay
-        DispatchQueue.global().asyncAfter(deadline: .now() + 0.5) {
-            // Create mock data based on screenshots
-            let mockMechanic = MechanicDetails(
-                id: mechanicID,
-                name: "Western Pit Stop Automotive Pty Ltd",
-                address: "10/11, Bowmans Road\nKings Park, 2148, NSW",
-                phone: "02 967 6 8 589",
-                logo: "https://picsum.photos/200/300",
-                headerImage: "https://picsum.photos/200/300",
-                services: [
-                    Service(title: "Log Book Service", description: "We provide our customers with the ability to service their brand new cars without affecting the seller's statutory warranty obligations. All services are carried out according to the manufacturer stipulated schedule and specifications."),
-                    Service(title: "eSafety Check & Inspection", description: "If you want to renew your vehicle registration and your vehicle is more than 5 years old, you will need a Safety Check. Safety checks are basic mechanical checks, targeting certain vehicle components that may cause a risk to drivers and passengers."),
-                    Service(title: "Repairs", description: "We provide a friendly, expert car repair service by fully qualified technicians. We do all routine and maintenance repairs and major parts replacement services for all makes and models of cars."),
-                    Service(title: "Services", description: "It is important to service your car regularly to ensure your safety and reliable motoring. Your safety and reliable motoring is our priority. We carry out 40 points safety check.")
-                ],
-                servicingAreas: [
-                    "Baulkham Hills, 2153",
-                    "Bella Vista, 2153",
-                    "Blacktown, 2148",
-                    "Carlingford, 2118",
-                    "Castle Hill, 2154",
-                    "Cherrybrook, 2126",
-                    "Eastwood, 2122",
-                    "Glenwood, 2768"
-                ],
-                openingHours: [
-                    OpeningHour(day: "Monday", status: "Open", startTime: "08:00:00", endTime: "17:00:00"),
-                    OpeningHour(day: "Tuesday", status: "Open", startTime: "08:00:00", endTime: "17:00:00"),
-                    OpeningHour(day: "Wednesday", status: "Open", startTime: "08:00:00", endTime: "17:00:00"),
-                    OpeningHour(day: "Thursday", status: "Open", startTime: "08:00:00", endTime: "17:00:00"),
-                    OpeningHour(day: "Friday", status: "Open", startTime: "08:00:00", endTime: "17:00:00"),
-                    OpeningHour(day: "Saturday", status: "Open", startTime: "08:00:00", endTime: "14:00:00"),
-                    OpeningHour(day: "Sunday", status: "Closed", startTime: "", endTime: "")
-                ],
-                locations: [
-                            MechanicLocation(
-                                coordinate: CLLocationCoordinate2D(latitude: -33.7439, longitude: 150.9139),
-                                name: "Kings Park Location",
-                                address: "10/11, Bowmans Road, Kings Park, 2148, NSW"
-                            ),
-                            MechanicLocation(
-                                coordinate: CLLocationCoordinate2D(latitude: -33.7620, longitude: 150.9220),
-                                name: "Blacktown Location",
-                                address: "25 Main Street, Blacktown, 2148, NSW"
-                            ),
-                            MechanicLocation(
-                                coordinate: CLLocationCoordinate2D(latitude: -33.7780, longitude: 150.9330),
-                                name: "Seven Hills Location",
-                                address: "102 Prospect Highway, Seven Hills, 2147, NSW"
-                            )
-                        ]
-            )
+        switch httpResponse.statusCode {
+        case 200...299:
+            return
+        case 401:
+            throw DataServiceError.networkError("Unauthorized access. Please check your authentication token.")
+        case 403:
+            throw DataServiceError.networkError("Access forbidden. You don't have permission to access this resource.")
+        case 404:
+            throw DataServiceError.notFound("Resource not found at endpoint: \(endpoint)")
+        case 500...599:
+            throw DataServiceError.networkError("Server error occurred (Status: \(httpResponse.statusCode))")
+        default:
+            throw DataServiceError.networkError("Unexpected status code: \(httpResponse.statusCode)")
+        }
+    }
+    
+    private func decode<T: Decodable>(_ data: Data, as type: T.Type = T.self) throws -> T {
+        do {
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .useDefaultKeys
+            return try decoder.decode(type, from: data)
+        } catch let DecodingError.keyNotFound(key, context) {
+            throw DataServiceError.decodingError("Missing key '\(key.stringValue)' - \(context.debugDescription)")
+        } catch let DecodingError.valueNotFound(type, context) {
+            throw DataServiceError.decodingError("Missing value of type '\(type)' - \(context.debugDescription)")
+        } catch let DecodingError.typeMismatch(type, context) {
+            throw DataServiceError.decodingError("Type mismatch for type '\(type)' - \(context.debugDescription)")
+        } catch let DecodingError.dataCorrupted(context) {
+            throw DataServiceError.decodingError("Data corrupted - \(context.debugDescription)")
+        } catch {
+            throw DataServiceError.decodingError("Unknown decoding error: \(error.localizedDescription)")
+        }
+    }
+    
+    // MARK: - API Calls
+    private func fetchTenantDetails(_ tenantId: String) async throws -> TenantResponse {
+        let endpoint = "api/tenants/\(tenantId)"
+        let request = createRequest(for: endpoint)
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            try validateResponse(response, for: endpoint)
             
-            completion(.success(mockMechanic))
+            guard !data.isEmpty else {
+                throw DataServiceError.invalidData("Empty response received for tenant details")
+            }
+            
+            print("Tenant details response for ID \(tenantId): \(String(data: data, encoding: .utf8) ?? "")")
+            return try decode(data)
+        } catch let error as DataServiceError {
+            throw error
+        } catch {
+            throw DataServiceError.unknown("Failed to fetch tenant details: \(error.localizedDescription)")
+        }
+    }
+    
+    private func fetchServiceAreas(_ tenantId: String) async throws -> [ServiceArea] {
+        let endpoint = "api/tenants/serviceAreas/\(tenantId)"
+        let request = createRequest(for: endpoint)
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            try validateResponse(response, for: endpoint)
+            
+            guard !data.isEmpty else {
+                throw DataServiceError.invalidData("Empty response received for service areas")
+            }
+            
+            let serviceAreaResponse: ServiceAreaResponse = try decode(data)
+            print("ServiceAreaResponse \(serviceAreaResponse)")
+            return serviceAreaResponse.result.result.values
+        } catch let error as DataServiceError {
+            throw error
+        } catch {
+            throw DataServiceError.unknown("Failed to fetch service areas: \(error.localizedDescription)")
+        }
+    }
+    
+    private func fetchServices(_ tenantId: String) async throws -> [TenantService] {
+        let endpoint = "api/tenants/services/\(tenantId)"
+        let request = createRequest(for: endpoint)
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            try validateResponse(response, for: endpoint)
+            
+            guard !data.isEmpty else {
+                throw DataServiceError.invalidData("Empty response received for services")
+            }
+            
+            let servicesResponse: TenantServiceResponse = try decode(data)
+            print("servicesResponse \(servicesResponse)")
+            return servicesResponse.result.result.values
+        } catch let error as DataServiceError {
+            throw error
+        } catch {
+            throw DataServiceError.unknown("Failed to fetch services: \(error.localizedDescription)")
+        }
+    }
+    
+    private func fetchOpeningHours(_ tenantId: String) async throws -> OpeningHoursResponse {
+        let endpoint = "api/tenants/openingHours/\(tenantId)"
+        let request = createRequest(for: endpoint)
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            try validateResponse(response, for: endpoint)
+            
+            guard !data.isEmpty else {
+                throw DataServiceError.invalidData("Empty response received for opening hours")
+            }
+            
+            let openingHoursResponse: OpeningHoursResponse = try decode(data)
+            print("OpeningHoursResponse \(openingHoursResponse)")
+            return openingHoursResponse
+        } catch let error as DataServiceError {
+            throw error
+        } catch {
+            throw DataServiceError.unknown("Failed to fetch opening hours: \(error.localizedDescription)")
+        }
+    }
+    
+    // MARK: - Public Methods
+    func getMechanicDetails(mechanicID: String, completion: @escaping (Result<MechanicDetails, Error>) -> Void) {
+        print("Fetching details for mechanic ID: \(mechanicID)")
+        Task {
+            do {
+                async let tenantResponse = fetchTenantDetails(mechanicID)
+                async let serviceAreas = fetchServiceAreas(mechanicID)
+                async let services = fetchServices(mechanicID)
+                async let hoursResponse = fetchOpeningHours(mechanicID)
+                
+                let (tenant, areas, tenantServices, hours) = try await (tenantResponse, serviceAreas, services, hoursResponse)
+                print("Successfully fetched all data for mechanic ID: \(mechanicID)")
+                
+                // Create formatted address
+                let address = [
+                    "\(tenant.billStreetNumber), \(tenant.billStreetName)",
+                    "\(tenant.billCity), \(tenant.billPostalCode)",
+                    tenant.billRegion ?? "",
+                    tenant.billCountry?.code ?? ""
+                ].joined(separator: "\n")
+                
+                // Convert services
+                let formattedServices = tenantServices.map { Service(title: $0.title, description: $0.description) }
+                
+                // Create opening hours
+                let formattedHours = [
+                    OpeningHour(day: "Monday", status: hours.monStatus, startTime: hours.monStart.replacingOccurrences(of: ":00:00", with: ":00"), endTime: hours.monEnd.replacingOccurrences(of: ":00:00", with: ":00")),
+                    OpeningHour(day: "Tuesday", status: hours.tueStatus, startTime: hours.tueStart.replacingOccurrences(of: ":00:00", with: ":00"), endTime: hours.tueEnd.replacingOccurrences(of: ":00:00", with: ":00")),
+                    OpeningHour(day: "Wednesday", status: hours.wedStatus, startTime: hours.wedStart.replacingOccurrences(of: ":00:00", with: ":00"), endTime: hours.wedEnd.replacingOccurrences(of: ":00:00", with: ":00")),
+                    OpeningHour(day: "Thursday", status: hours.thuStatus, startTime: hours.thuStart.replacingOccurrences(of: ":00:00", with: ":00"), endTime: hours.thuEnd.replacingOccurrences(of: ":00:00", with: ":00")),
+                    OpeningHour(day: "Friday", status: hours.friStatus, startTime: hours.friStart.replacingOccurrences(of: ":00:00", with: ":00"), endTime: hours.friEnd.replacingOccurrences(of: ":00:00", with: ":00")),
+                    OpeningHour(day: "Saturday", status: hours.satStatus, startTime: hours.satStart.replacingOccurrences(of: ":00:00", with: ":00"), endTime: hours.satEnd.replacingOccurrences(of: ":00:00", with: ":00")),
+                    OpeningHour(day: "Sunday", status: hours.sunStatus, startTime: hours.sunStart.replacingOccurrences(of: ":00:00", with: ":00"), endTime: hours.sunEnd.replacingOccurrences(of: ":00:00", with: ":00"))
+                ]
+                
+                print("Debug - First opening hour: \(formattedHours[0])")
+                
+                // Create location
+                let location = MechanicLocation(
+                    coordinate: CLLocationCoordinate2D(latitude: tenant.billLatitude ?? 0, longitude: tenant.billLongitude ?? 0),
+                    name: tenant.businessName ?? "",
+                    address: address
+                )
+                
+                let mechanicDetails = MechanicDetails(
+                    id: String(tenant.id ?? 0),
+                    name: tenant.businessName ?? "",
+                    address: address,
+                    phone: tenant.phoneNumber ?? "",
+                    fax: tenant.fax ?? "",
+                    email: tenant.email ?? "",
+                    licenseNumber: tenant.licenseNumber ?? "",
+                    businessRegistrationNumber: tenant.businessRegistrationNumber ?? "",
+                    logo: tenant.logo,
+                    bannerImage: tenant.bannerImage,
+                    services: formattedServices,
+                    servicingAreas: areas,
+                    openingHours: formattedHours,
+                    locations: [location],
+                    price: tenant.price ?? 0
+                )
+                
+                DispatchQueue.main.async {
+                    completion(.success(mechanicDetails))
+                }
+            } catch {
+                let errorMessage: String
+                if let dataError = error as? DataServiceError {
+                    errorMessage = dataError.errorDescription ?? "Unknown error occurred"
+                } else {
+                    errorMessage = error.localizedDescription
+                }
+                
+                print("Get Mechanic Details Error: \(errorMessage)")
+                DispatchQueue.main.async {
+                    completion(.failure(DataServiceError.unknown(errorMessage)))
+                }
+            }
         }
     }
     
     // MARK: - Mechanics List
     func getMechanicsList(location: CLLocationCoordinate2D?, completion: @escaping (Result<[MechanicDetails], Error>) -> Void) {
-        // This would fetch a list of mechanics, possibly filtered by location
-        // For now, it returns a single item array with our mock mechanic
-        DispatchQueue.global().asyncAfter(deadline: .now() + 0.5) {
-            let mockMechanic = MechanicDetails(
-                id: "1",
-                name: "Western Pit Stop Automotive Pty Ltd",
-                address: "10/11, Bowmans Road\nKings Park, 2148, NSW",
-                phone: "02 967 6 8 589",
-                logo: "https://picsum.photos/200/300",
-                headerImage: nil,
-                services: [],
-                servicingAreas: [],
-                openingHours: [],
-                locations: [
-                            MechanicLocation(
-                                coordinate: CLLocationCoordinate2D(latitude: -33.7439, longitude: 150.9139),
-                                name: "Kings Park Location",
-                                address: "10/11, Bowmans Road, Kings Park, 2148, NSW"
-                            ),
-                            MechanicLocation(
-                                coordinate: CLLocationCoordinate2D(latitude: -33.7620, longitude: 150.9220),
-                                name: "Blacktown Location",
-                                address: "25 Main Street, Blacktown, 2148, NSW"
-                            ),
-                            MechanicLocation(
-                                coordinate: CLLocationCoordinate2D(latitude: -33.7780, longitude: 150.9330),
-                                name: "Seven Hills Location",
-                                address: "102 Prospect Highway, Seven Hills, 2147, NSW"
-                            )
-                        ]
-            )
-            
-            completion(.success([mockMechanic]))
+        let endpoint = "api/Tenants"
+        let request = createRequest(for: endpoint)
+        
+        Task {
+            do {
+                let (data, response) = try await URLSession.shared.data(for: request)
+                try validateResponse(response, for: endpoint)
+                
+                guard !data.isEmpty else {
+                    throw DataServiceError.invalidData("Empty response received for mechanics list")
+                }
+                
+                let apiResponse = try decode(data, as: APIResponse.self)
+                let mechanics = apiResponse.result.result.map { tenant in
+                    // Create formatted address
+                    let address = [
+                        "\(tenant.billStreetNumber ?? ""), \(tenant.billStreetName ?? "")",
+                        "\(tenant.billCity ?? ""), \(tenant.billPostalCode ?? "")",
+                        tenant.billRegion ?? "",
+                        tenant.billCountry?.code ?? ""
+                    ].joined(separator: "\n")
+                    
+                    // Create location
+                    let location = MechanicLocation(
+                        coordinate: CLLocationCoordinate2D(latitude: tenant.billLatitude, longitude: tenant.billLongitude),
+                        name: tenant.businessName,
+                        address: address
+                    )
+                    
+                    return MechanicDetails(
+                        id: String(tenant.id),
+                        name: tenant.businessName,
+                        address: address,
+                        phone: tenant.phoneNumber,
+                        fax: "",
+                        email: tenant.phoneNumber, // Using phone as email since it's not in the API response
+                        licenseNumber: "N/A",
+                        businessRegistrationNumber: "N/A",
+                        logo: tenant.logo,
+                        bannerImage: "",
+                        services: [],
+                        servicingAreas: [],
+                        openingHours: [],
+                        locations: [location],
+                        price: 0.0
+                    )
+                }
+                
+                DispatchQueue.main.async {
+                    completion(.success(mechanics))
+                }
+            } catch {
+                let errorMessage: String
+                if let dataError = error as? DataServiceError {
+                    errorMessage = dataError.errorDescription ?? "Unknown error occurred"
+                } else {
+                    errorMessage = error.localizedDescription
+                }
+                
+                print("Get Mechanics List Error: \(errorMessage)")
+                DispatchQueue.main.async {
+                    completion(.failure(DataServiceError.unknown(errorMessage)))
+                }
+            }
         }
     }
     
     // MARK: - Book Appointment
     func bookAppointment(mechanicID: String, date: Date, service: String, completion: @escaping (Result<Bool, Error>) -> Void) {
         // This would send an appointment booking request to the server
-        DispatchQueue.global().asyncAfter(deadline: .now() + 0.5) {
+        DispatchQueue.global().async {
             // Simulate success
-            completion(.success(true))
+            DispatchQueue.main.async {
+                completion(.success(true))
+            }
         }
     }
     
     // MARK: - Send Inquiry
     func sendInquiry(mechanicID: String, message: String, contactInfo: String, completion: @escaping (Result<Bool, Error>) -> Void) {
         // This would send an inquiry to the mechanic
-        DispatchQueue.global().asyncAfter(deadline: .now() + 0.5) {
+        DispatchQueue.global().async {
             // Simulate success
-            completion(.success(true))
+            DispatchQueue.main.async {
+                completion(.success(true))
+            }
         }
     }
 }

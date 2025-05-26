@@ -10,7 +10,9 @@ class MechanicDetailTableDelegate: NSObject, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewController?.mechanic?.openingHours.count ?? 0
+        let count = viewController?.mechanic?.openingHours.count ?? 0
+        print("Number of opening hours rows: \(count)")
+        return count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -20,22 +22,51 @@ class MechanicDetailTableDelegate: NSObject, UITableViewDelegate, UITableViewDat
             return cell
         }
         
-        // Configure cell
-        var content = cell.defaultContentConfiguration()
-        content.text = hour.day
+        // Create a custom layout for better visibility
+        let dayLabel = UILabel()
+        dayLabel.text = hour.day
+        dayLabel.font = .systemFont(ofSize: 16, weight: .medium)
+        dayLabel.textColor = .label
+        dayLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        if hour.status == "Open" {
-            let timeString = "\(viewBuilder.formatTime(hour.startTime)) - \(viewBuilder.formatTime(hour.endTime))"
-            content.secondaryText = timeString
-            content.secondaryTextProperties.color = .systemGreen
+        let timeLabel = UILabel()
+        if hour.status {
+            let startTime = viewBuilder.formatTime(hour.startTime)
+            let endTime = viewBuilder.formatTime(hour.endTime)
+            timeLabel.text = "\(startTime) - \(endTime)"
+            timeLabel.textColor = .systemGreen
         } else {
-            content.secondaryText = "Closed"
-            content.secondaryTextProperties.color = .systemRed
+            timeLabel.text = "Closed"
+            timeLabel.textColor = .systemRed
         }
+        timeLabel.font = .systemFont(ofSize: 14)
+        timeLabel.textAlignment = .right
+        timeLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        cell.contentConfiguration = content
+        // Clear existing subviews
+        cell.contentView.subviews.forEach { $0.removeFromSuperview() }
+        
+        // Add labels to cell
+        cell.contentView.addSubview(dayLabel)
+        cell.contentView.addSubview(timeLabel)
+        
+        // Setup constraints
+        NSLayoutConstraint.activate([
+            dayLabel.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 16),
+            dayLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
+            
+            timeLabel.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -16),
+            timeLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
+            timeLabel.leadingAnchor.constraint(greaterThanOrEqualTo: dayLabel.trailingAnchor, constant: 8)
+        ])
+        
         cell.selectionStyle = .none
+        cell.backgroundColor = .systemBackground
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 44
     }
 } 

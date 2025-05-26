@@ -20,6 +20,7 @@ class MechanicListViewController: UIViewController {
     private var isSearching = false
     private let emptyStateView = UIView()
     private let navigationDelegate = MechanicListNavigationDelegate()
+    private let dataService = MachanicListDataService.shared
     
     private lazy var searchHandler = MechanicListSearchHandler(viewController: self)
     private lazy var tableHandler = MechanicListTableHandler(viewController: self, tableView: tableView)
@@ -103,12 +104,12 @@ class MechanicListViewController: UIViewController {
         isLoading = true
         showLoadingIndicator()
         
-        MachanicListDataService.shared.getMechanics(page: page, itemsPerPage: itemsPerPage) { [weak self] result in
+        dataService.getMechanics(page: page, itemsPerPage: itemsPerPage) { [weak self] result in
             guard let self = self else { return }
             
             DispatchQueue.main.async {
                 self.hideLoadingIndicator()
-                self.handleFetchResult(result,  forPage: page)
+                self.handleFetchResult(result, forPage: page)
             }
         }
     }
@@ -168,7 +169,9 @@ class MechanicListViewController: UIViewController {
     
     // MARK: - Navigation
     func navigateToDetail(for mechanic: Mechanic) {
+        print("Selected mechanic ID: \(mechanic.id)")
         let detailVC = MechanicDetailViewController()
+        detailVC.mechanicID = mechanic.id
         navigationController?.pushViewController(detailVC, animated: true)
     }
 }

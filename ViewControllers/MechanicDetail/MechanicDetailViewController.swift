@@ -12,6 +12,7 @@ class MechanicDetailViewController: UIViewController {
     
     // MARK: - Properties
     var mechanic: MechanicDetails?
+    var mechanicID: String?
     private let dataService = MachanicDetailsDataService.shared
     private let viewBuilder = MechanicDetailViewBuilder()
     private lazy var layoutManager = MechanicDetailLayout(viewController: self)
@@ -114,6 +115,15 @@ class MechanicDetailViewController: UIViewController {
         hoursTableView.dataSource = tableDelegate
         hoursTableView.register(UITableViewCell.self, forCellReuseIdentifier: "hourCell")
         hoursTableView.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
+        hoursTableView.backgroundColor = .systemBackground
+        hoursTableView.isHidden = false
+        hoursTableView.layer.borderWidth = 1
+        hoursTableView.layer.borderColor = UIColor.systemGray4.cgColor
+        hoursTableView.layer.cornerRadius = 8
+        hoursTableView.clipsToBounds = true
+        hoursTableView.isScrollEnabled = false
+        hoursTableView.rowHeight = 44
+        print("Setting up table view - Frame: \(hoursTableView.frame)")
     }
     
     private func setupMapView() {
@@ -122,7 +132,13 @@ class MechanicDetailViewController: UIViewController {
     
     // MARK: - Data Loading Methods
     private func fetchMechanicDetails() {
-        let mechanicID = mechanic?.id ?? "1"
+        guard let mechanicID = mechanicID else {
+            print("Error: mechanicID is nil")
+            showError(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Mechanic ID not found"]))
+            return
+        }
+        
+        print("Fetching details for mechanic ID: \(mechanicID)")
         LoadingIndicator.show(in: view)
         
         dataService.getMechanicDetails(mechanicID: mechanicID) { [weak self] result in
@@ -150,13 +166,28 @@ class MechanicDetailViewController: UIViewController {
         phoneLabel.text = "Phone: \(mechanic.phone)"
         
         loadImage(from: mechanic.logo, into: logoImageView)
-        loadImage(from: mechanic.headerImage, into: headerImageView)
+//        loadImage(from: mechanic.headerImage, into: headerImageView)
         
         updateServices(mechanic.services)
         updateAreas(mechanic.servicingAreas)
         viewBuilder.setMapLocation(mapView: mapView, locations: mechanic.locations)
         
+        print("Opening Hours to display: \(mechanic.openingHours)")
+        print("Hours table view is hidden: \(hoursTableView.isHidden)")
+        print("Hours table view frame after update: \(hoursTableView.frame)")
+        
         hoursTableView.reloadData()
+        hoursTableView.layoutIfNeeded()
+        
+        // Force layout update
+        view.setNeedsLayout()
+        view.layoutIfNeeded()
+        
+        print("Hours table view frame after layout: \(hoursTableView.frame)")
+        
+        // Ensure table view is visible in scroll view
+        let tableViewRect = hoursTableView.convert(hoursTableView.bounds, to: scrollView)
+        scrollView.scrollRectToVisible(tableViewRect, animated: true)
     }
     
     private func loadImage(from urlString: String?, into imageView: UIImageView) {
@@ -188,7 +219,7 @@ class MechanicDetailViewController: UIViewController {
         }
     }
     
-    private func updateAreas(_ areas: [String]) {
+    private func updateAreas(_ areas: [ServiceArea]) {
         areasStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         let areasView = viewBuilder.createAreasView(areas: areas)
         areasStackView.addArrangedSubview(areasView)

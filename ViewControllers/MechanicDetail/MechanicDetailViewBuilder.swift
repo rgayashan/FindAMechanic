@@ -37,79 +37,41 @@ class MechanicDetailViewBuilder {
         return containerView
     }
     
-    func createAreasView(areas: [String]) -> UIView {
+    func createAreasView(areas: [ServiceArea]) -> UIView {
         let containerView = UIView()
-        let gridStackView = UIStackView()
-        gridStackView.axis = .vertical
-        gridStackView.spacing = 10
-        gridStackView.distribution = .fillEqually
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 8
+        stackView.distribution = .fill
+        stackView.alignment = .fill
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         
-        var rowStackView = UIStackView()
-        rowStackView.axis = .horizontal
-        rowStackView.distribution = .fillEqually
-        rowStackView.spacing = 10
+        // Group areas by postal code
+        let groupedAreas = Dictionary(grouping: areas) { $0.postalCode }
+        let sortedPostalCodes = groupedAreas.keys.sorted()
         
-        for (index, area) in areas.enumerated() {
-            if index % 2 == 0 && index > 0 {
-                gridStackView.addArrangedSubview(rowStackView)
-                rowStackView = UIStackView()
-                rowStackView.axis = .horizontal
-                rowStackView.distribution = .fillEqually
-                rowStackView.spacing = 10
+        for postalCode in sortedPostalCodes {
+            if let areas = groupedAreas[postalCode] {
+                let areaNames = areas.map { $0.cityName }.sorted()
+                let areaText = "\(areaNames.joined(separator: ", ")) - \(postalCode)"
+                
+                let label = UILabel()
+                label.text = areaText
+                label.font = UIFont.systemFont(ofSize: 16)
+                label.textColor = .label
+                label.numberOfLines = 0
+                
+                stackView.addArrangedSubview(label)
             }
-            
-            let areaView = createAreaItemView(area: area)
-            rowStackView.addArrangedSubview(areaView)
         }
         
-        // Add the last row if it has any items
-        if rowStackView.arrangedSubviews.count > 0 {
-            gridStackView.addArrangedSubview(rowStackView)
-        }
-        
-        gridStackView.translatesAutoresizingMaskIntoConstraints = false
-        containerView.addSubview(gridStackView)
+        containerView.addSubview(stackView)
         
         NSLayoutConstraint.activate([
-            gridStackView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            gridStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            gridStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            gridStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-        ])
-        
-        return containerView
-    }
-    
-    private func createAreaItemView(area: String) -> UIView {
-        let containerView = UIView()
-        
-        let pinImageView = UIImageView(image: UIImage(systemName: "mappin.circle.fill"))
-        pinImageView.tintColor = .red
-        pinImageView.contentMode = .scaleAspectFit
-        
-        let areaLabel = UILabel()
-        areaLabel.text = area
-        areaLabel.font = UIFont.systemFont(ofSize: 14)
-        areaLabel.textColor = .label
-        areaLabel.numberOfLines = 0
-        
-        pinImageView.translatesAutoresizingMaskIntoConstraints = false
-        areaLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        containerView.addSubview(pinImageView)
-        containerView.addSubview(areaLabel)
-        
-        NSLayoutConstraint.activate([
-            pinImageView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            pinImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            pinImageView.widthAnchor.constraint(equalToConstant: 24),
-            pinImageView.heightAnchor.constraint(equalToConstant: 24),
-            
-            areaLabel.topAnchor.constraint(equalTo: containerView.topAnchor),
-            areaLabel.leadingAnchor.constraint(equalTo: pinImageView.trailingAnchor, constant: 8),
-            areaLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            areaLabel.centerYAnchor.constraint(equalTo: pinImageView.centerYAnchor),
-            areaLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+            stackView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            stackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            stackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
         ])
         
         return containerView
@@ -151,16 +113,29 @@ class MechanicDetailViewBuilder {
             return ""
         }
         
-        // Convert 24-hour format to 12-hour format
-        let components = timeString.components(separatedBy: ":")
-        guard components.count >= 2 else { return timeString }
+        print("Debug - Formatting time string: '\(timeString)'")
         
-        if let hour = Int(components[0]) {
-            let period = hour >= 12 ? "PM" : "AM"
-            let hour12 = hour > 12 ? hour - 12 : (hour == 0 ? 12 : hour)
-            return "\(hour12):\(components[1]) \(period)"
+        // Split the time string into components
+        let components = timeString.components(separatedBy: ":")
+        guard components.count >= 2 else {
+            print("Debug - Invalid time format: '\(timeString)'")
+            return timeString
         }
         
+        if let hour = Int(components[0]) {
+            // Handle 24-hour format conversion to 12-hour format
+            let period = hour >= 12 ? "PM" : "AM"
+            let hour12 = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour)
+            
+            // Format minutes
+            let minutes = components[1]
+            
+            let formattedTime = String(format: "%d:%@ %@", hour12, minutes, period)
+            print("Debug - Formatted time: '\(formattedTime)'")
+            return formattedTime
+        }
+        
+        print("Debug - Could not parse hour from: '\(timeString)'")
         return timeString
     }
 } 

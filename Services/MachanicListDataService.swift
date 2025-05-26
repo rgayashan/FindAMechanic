@@ -25,7 +25,7 @@ struct PagedResponseWrapper: Codable {
     let page: Int
     let pageSize: Int
     let totalPages: Int
-    let result: [TenantResponse]
+    let result: [TenantListResponse]
     
     enum CodingKeys: String, CodingKey {
         case type = "$type"
@@ -36,7 +36,7 @@ struct PagedResponseWrapper: Codable {
     }
 }
 
-struct TenantResponse: Codable {
+struct TenantListResponse: Codable {
     let businessName: String
     let phoneNumber: String
     let logo: String?
@@ -45,13 +45,13 @@ struct TenantResponse: Codable {
     let billCity: String?
     let billPostalCode: String?
     let billRegion: String?
-    let billCountry: Country?
+    let billCountry: CountryList?
     let billLatitude: Double
     let billLongitude: Double
     let id: Int
 }
 
-struct Country: Codable {
+struct CountryList: Codable {
     let code: String?
 }
 

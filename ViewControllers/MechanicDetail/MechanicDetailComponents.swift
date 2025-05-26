@@ -80,9 +80,14 @@ struct MechanicDetailComponents {
     }
     
     static func createHoursTableView() -> UITableView {
-        let tableView = UITableView()
+        let tableView = UITableView(frame: .zero, style: .plain)
         tableView.isScrollEnabled = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.backgroundColor = .systemBackground
+        tableView.layer.borderColor = UIColor.systemGray4.cgColor
+        tableView.layer.borderWidth = 1
+        tableView.layer.cornerRadius = 8
+        tableView.clipsToBounds = true
         return tableView
     }
 } 
