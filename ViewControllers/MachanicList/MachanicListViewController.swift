@@ -19,7 +19,6 @@ class MechanicListViewController: UIViewController {
     private var hasMoreData = true
     private var isSearching = false
     private let emptyStateView = UIView()
-    private let navigationDelegate = MechanicListNavigationDelegate()
     private let dataService = MachanicListDataService.shared
     
     private lazy var searchHandler = MechanicListSearchHandler(viewController: self)
@@ -36,7 +35,6 @@ class MechanicListViewController: UIViewController {
     // MARK: - Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.delegate = navigationDelegate
         setupUI()
         
         // Start loading with refresh indicator

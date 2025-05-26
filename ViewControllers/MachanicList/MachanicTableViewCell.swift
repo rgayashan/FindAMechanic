@@ -102,14 +102,9 @@ class MechanicTableViewCell: UITableViewCell {
         } else {
             logoImageView.image = UIImage(named: "placeholder")
         }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            MechanicCellAnimator.applyButtonAnimation(to: self.bookButton)
-        }
     }
     
     private func loadImage(from urlString: String) {
-        // In a real app, use SDWebImage or Kingfisher to load images asynchronously
         DispatchQueue.global().async {
             if let url = URL(string: urlString), let data = try? Data(contentsOf: url) {
                 DispatchQueue.main.async { [weak self] in
@@ -119,25 +114,9 @@ class MechanicTableViewCell: UITableViewCell {
         }
     }
     
-    // MARK: - Animation Methods
-    func animateOnAppear(withDelay delay: Double = 0) {
-        MechanicCellAnimator.applyAppearAnimation(to: self, containerView: containerView, withDelay: delay)
-    }
-    
-    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        super.setHighlighted(highlighted, animated: animated)
-        
-        if animated {
-            MechanicCellAnimator.applyHighlightAnimation(to: containerView, isHighlighted: highlighted)
-        }
-    }
-    
     // MARK: - Actions
     @objc private func bookButtonTapped() {
         guard let mechanic = self.mechanic else { return }
-        
-        MechanicCellAnimator.applyTapAnimation(to: bookButton) {
-            self.delegate?.didTapBookButton(for: mechanic)
-        }
+        delegate?.didTapBookButton(for: mechanic)
     }
 }

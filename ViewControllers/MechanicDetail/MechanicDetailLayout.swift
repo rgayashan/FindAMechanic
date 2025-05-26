@@ -51,7 +51,7 @@ class MechanicDetailLayout {
             headerImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             headerImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             headerImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            headerImageView.heightAnchor.constraint(equalToConstant: 300),
+            headerImageView.heightAnchor.constraint(equalToConstant: 200),
             
             logoImageView.topAnchor.constraint(equalTo: headerImageView.bottomAnchor, constant: padding),
             logoImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),

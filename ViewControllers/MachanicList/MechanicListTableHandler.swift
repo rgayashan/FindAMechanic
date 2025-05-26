@@ -54,10 +54,6 @@ extension MechanicListTableHandler: UITableViewDataSource {
         if let mechanic = viewController?.currentMechanics[indexPath.row] {
             cell.configure(with: mechanic)
             cell.delegate = viewController
-            
-            // Calculate delay based on cell index for staggered animation
-            let delay = Double(indexPath.row) * 0.05
-            cell.animateOnAppear(withDelay: delay)
         }
         
         return cell
