@@ -14,7 +14,7 @@ class MechanicDetailViewBuilder {
         let descriptionLabel = UILabel()
         descriptionLabel.text = service.description
         descriptionLabel.font = UIFont.systemFont(ofSize: 16)
-        descriptionLabel.textColor = .label
+        descriptionLabel.textColor = .darkGray
         descriptionLabel.numberOfLines = 0
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -58,7 +58,7 @@ class MechanicDetailViewBuilder {
                 let label = UILabel()
                 label.text = areaText
                 label.font = UIFont.systemFont(ofSize: 16)
-                label.textColor = .label
+                label.textColor = .darkGray
                 label.numberOfLines = 0
                 
                 stackView.addArrangedSubview(label)

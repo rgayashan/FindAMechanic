@@ -26,7 +26,7 @@ class MechanicDetailTableDelegate: NSObject, UITableViewDelegate, UITableViewDat
         let dayLabel = UILabel()
         dayLabel.text = hour.day
         dayLabel.font = .systemFont(ofSize: 16, weight: .medium)
-        dayLabel.textColor = .label
+        dayLabel.textColor = .darkGray
         dayLabel.translatesAutoresizingMaskIntoConstraints = false
         
         let timeLabel = UILabel()

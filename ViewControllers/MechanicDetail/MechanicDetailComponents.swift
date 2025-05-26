@@ -24,7 +24,7 @@ struct MechanicDetailComponents {
     static func createNameLabel() -> UILabel {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
-        label.textColor = .label
+        label.textColor = .black
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -33,7 +33,7 @@ struct MechanicDetailComponents {
     static func createAddressLabel() -> UILabel {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16)
-        label.textColor = .secondaryLabel
+        label.textColor = .black
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -42,7 +42,7 @@ struct MechanicDetailComponents {
     static func createPhoneLabel() -> UILabel {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16)
-        label.textColor = .secondaryLabel
+        label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }
