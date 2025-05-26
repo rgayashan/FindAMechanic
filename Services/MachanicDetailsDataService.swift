@@ -218,12 +218,18 @@ class MachanicDetailsDataService {
                 
                 print("Debug - First opening hour: \(formattedHours[0])")
                 
-                // Create location
-                let location = MechanicLocation(
-                    coordinate: CLLocationCoordinate2D(latitude: tenant.billLatitude ?? 0, longitude: tenant.billLongitude ?? 0),
-                    name: tenant.businessName ?? "",
-                    address: address
-                )
+                // Create location only if valid coordinates exist
+                var locations: [MechanicLocation] = []
+                if let latitude = tenant.billLatitude,
+                   let longitude = tenant.billLongitude,
+                   latitude != 0 || longitude != 0 {
+                    let location = MechanicLocation(
+                        coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude),
+                        name: tenant.businessName ?? "",
+                        address: address
+                    )
+                    locations.append(location)
+                }
                 
                 let mechanicDetails = MechanicDetails(
                     id: String(tenant.id ?? 0),
@@ -239,7 +245,7 @@ class MachanicDetailsDataService {
                     services: formattedServices,
                     servicingAreas: areas,
                     openingHours: formattedHours,
-                    locations: [location],
+                    locations: locations,
                     price: tenant.price ?? 0
                 )
                 
@@ -287,12 +293,16 @@ class MachanicDetailsDataService {
                     ].filter { !$0.isEmpty && $0 != ", " }
                      .joined(separator: "\n")
                     
-                    // Create location
-                    let location = MechanicLocation(
-                        coordinate: CLLocationCoordinate2D(latitude: tenant.billLatitude, longitude: tenant.billLongitude),
-                        name: tenant.businessName,
-                        address: address
-                    )
+                    // Create location only if valid coordinates exist
+                    var locations: [MechanicLocation] = []
+                    if tenant.billLatitude != 0 || tenant.billLongitude != 0 {
+                        let location = MechanicLocation(
+                            coordinate: CLLocationCoordinate2D(latitude: tenant.billLatitude, longitude: tenant.billLongitude),
+                            name: tenant.businessName,
+                            address: address
+                        )
+                        locations.append(location)
+                    }
                     
                     return MechanicDetails(
                         id: String(tenant.id),
@@ -308,7 +318,7 @@ class MachanicDetailsDataService {
                         services: [],
                         servicingAreas: [],
                         openingHours: [],
-                        locations: [location],
+                        locations: locations,
                         price: 0.0
                     )
                 }
