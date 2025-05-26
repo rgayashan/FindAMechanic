@@ -4,7 +4,7 @@ import MapKit
 struct MechanicDetailComponents {
     static func createHeaderImageView() -> UIImageView {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleToFill
         imageView.clipsToBounds = true
         imageView.backgroundColor = .systemGray6
         imageView.translatesAutoresizingMaskIntoConstraints = false
