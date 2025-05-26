@@ -35,7 +35,7 @@ class MechanicTableViewCell: UITableViewCell {
     // MARK: - Setup Methods
     private func setupUI() {
         selectionStyle = .none
-        contentView.backgroundColor = .systemGroupedBackground
+        contentView.backgroundColor = .white
         
         contentView.addSubview(containerView)
         [logoImageView, nameLabel, addressLine1Label, addressLine2Label, phoneLabel, bookButton]

@@ -83,7 +83,7 @@ struct MechanicDetailComponents {
         let tableView = UITableView(frame: .zero, style: .plain)
         tableView.isScrollEnabled = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.backgroundColor = .systemBackground
+        tableView.backgroundColor = .white
         tableView.layer.borderColor = UIColor.systemGray4.cgColor
         tableView.layer.borderWidth = 1
         tableView.layer.cornerRadius = 8

@@ -61,7 +61,7 @@ class MechanicDetailViewController: UIViewController {
     
     // MARK: - Setup Methods
     private func setupView() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .white
         setupScrollView()
         setupNavigationBar()
         scrollView.isHidden = true
@@ -115,7 +115,7 @@ class MechanicDetailViewController: UIViewController {
         hoursTableView.dataSource = tableDelegate
         hoursTableView.register(UITableViewCell.self, forCellReuseIdentifier: "hourCell")
         hoursTableView.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
-        hoursTableView.backgroundColor = .systemBackground
+        hoursTableView.backgroundColor = .white
         hoursTableView.isHidden = false
         hoursTableView.layer.borderWidth = 1
         hoursTableView.layer.borderColor = UIColor.systemGray4.cgColor

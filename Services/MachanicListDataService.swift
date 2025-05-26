@@ -101,6 +101,7 @@ class MachanicListDataService {
             do {
                 let apiResponse = try JSONDecoder().decode(APIResponse.self, from: data)
                 print("apiResponse \(apiResponse)")
+                print("apiResponse123")
                 let mechanics = apiResponse.result.result.map { tenant in
                     let addressLine1 = [tenant.billStreetNumber, tenant.billStreetName]
                         .compactMap { $0 }

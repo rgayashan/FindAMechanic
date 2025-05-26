@@ -61,7 +61,7 @@ class MechanicDetailTableDelegate: NSObject, UITableViewDelegate, UITableViewDat
         ])
         
         cell.selectionStyle = .none
-        cell.backgroundColor = .systemBackground
+        cell.backgroundColor = .white
         
         return cell
     }

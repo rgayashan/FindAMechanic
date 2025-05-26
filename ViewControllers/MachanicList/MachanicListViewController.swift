@@ -46,6 +46,7 @@ class MechanicListViewController: UIViewController {
     
     // MARK: - Setup Methods
     private func setupUI() {
+        view.backgroundColor = .white
         setupNavigationBar()
         setupTableView()
         setupEmptyStateView()
@@ -67,7 +68,8 @@ class MechanicListViewController: UIViewController {
     }
     
     private func setupTableView() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .white
+        tableView.backgroundColor = .white
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
         

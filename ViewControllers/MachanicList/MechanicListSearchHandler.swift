@@ -17,8 +17,12 @@ class MechanicListSearchHandler: NSObject {
         searchController.searchBar.placeholder = "Search mechanics by name or location"
         
         if let textField = searchController.searchBar.value(forKey: "searchField") as? UITextField {
-            textField.textColor = .darkText
+            textField.textColor = .black
             textField.backgroundColor = .white
+            textField.attributedPlaceholder = NSAttributedString(
+                string: "Search mechanics by name or location",
+                attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray]
+            )
         }
         
         viewController?.navigationItem.searchController = searchController
