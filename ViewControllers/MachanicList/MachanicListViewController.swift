@@ -55,7 +55,10 @@ class MechanicListViewController: UIViewController {
             let navBarAppearance = UINavigationBarAppearance()
             navBarAppearance.configureWithOpaqueBackground()
             navBarAppearance.backgroundColor = UIColor(named: "theme-bg")
-            navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+            navBarAppearance.titleTextAttributes = [
+                .foregroundColor: UIColor.white,
+                .font: UIFont.systemFont(ofSize: 20, weight: .bold)
+            ]
             
             navigationController?.navigationBar.standardAppearance = navBarAppearance
             navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
@@ -68,6 +71,9 @@ class MechanicListViewController: UIViewController {
     private func setupTableView() {
         view.backgroundColor = .white
         tableView.backgroundColor = .white
+        tableView.separatorStyle = .none
+        tableView.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 20, right: 0)
+        
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
         
@@ -81,7 +87,49 @@ class MechanicListViewController: UIViewController {
     
     private func setupEmptyStateView() {
         emptyStateView.isHidden = true
-        // Add empty state view setup code here if needed
+        emptyStateView.backgroundColor = .systemGroupedBackground
+        
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.alignment = .center
+        stackView.spacing = 16
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let imageView = UIImageView(image: UIImage(systemName: "wrench.and.screwdriver"))
+        imageView.tintColor = .systemGray
+        imageView.contentMode = .scaleAspectFit
+        imageView.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        
+        let titleLabel = UILabel()
+        titleLabel.text = "No Mechanics Found"
+        titleLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        titleLabel.textColor = .label
+        
+        let messageLabel = UILabel()
+        messageLabel.text = "Try adjusting your search to find what you're looking for."
+        messageLabel.font = UIFont.systemFont(ofSize: 16)
+        messageLabel.textColor = .secondaryLabel
+        messageLabel.textAlignment = .center
+        messageLabel.numberOfLines = 0
+        
+        [imageView, titleLabel, messageLabel].forEach { stackView.addArrangedSubview($0) }
+        
+        emptyStateView.addSubview(stackView)
+        view.addSubview(emptyStateView)
+        
+        emptyStateView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            emptyStateView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            emptyStateView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            emptyStateView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            emptyStateView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            stackView.centerXAnchor.constraint(equalTo: emptyStateView.centerXAnchor),
+            stackView.centerYAnchor.constraint(equalTo: emptyStateView.centerYAnchor),
+            stackView.leadingAnchor.constraint(equalTo: emptyStateView.leadingAnchor, constant: 40),
+            stackView.trailingAnchor.constraint(equalTo: emptyStateView.trailingAnchor, constant: -40)
+        ])
     }
     
     // MARK: - Data Loading

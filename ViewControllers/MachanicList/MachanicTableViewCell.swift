@@ -49,10 +49,10 @@ class MechanicTableViewCell: UITableViewCell {
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             // Container constraints
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
             containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
             
             // Logo constraints
             logoImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
@@ -82,9 +82,9 @@ class MechanicTableViewCell: UITableViewCell {
             
             // Book button constraints
             bookButton.topAnchor.constraint(equalTo: phoneLabel.bottomAnchor, constant: 16),
-            bookButton.trailingAnchor.constraint(equalTo: phoneLabel.trailingAnchor),
+            bookButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
             bookButton.heightAnchor.constraint(equalToConstant: 44),
-            bookButton.widthAnchor.constraint(equalToConstant: 150),
+            bookButton.widthAnchor.constraint(equalToConstant: 160),
             bookButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -16)
         ])
     }

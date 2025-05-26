@@ -5,18 +5,20 @@ struct MechanicCellComponents {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .white
-        view.layer.cornerRadius = 8
-        view.layer.borderWidth = 0.5
-        view.layer.borderColor = UIColor.systemGray4.cgColor
+        view.layer.cornerRadius = 12
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOffset = CGSize(width: 0, height: 2)
+        view.layer.shadowRadius = 6
+        view.layer.shadowOpacity = 0.1
         return view
     }
     
     static func createLogoImageView() -> UIImageView {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.backgroundColor = .systemGray6
-        imageView.layer.cornerRadius = 6
+        imageView.layer.cornerRadius = 40
         imageView.clipsToBounds = true
         return imageView
     }
@@ -24,8 +26,9 @@ struct MechanicCellComponents {
     static func createNameLabel() -> UILabel {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         label.textColor = .black
+        label.numberOfLines = 0
         return label
     }
     
@@ -33,7 +36,8 @@ struct MechanicCellComponents {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 14)
-        label.textColor = .darkGray
+        label.textColor = .systemGray
+        label.numberOfLines = 0
         return label
     }
     
@@ -41,7 +45,7 @@ struct MechanicCellComponents {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 14)
-        label.textColor = .darkGray
+        label.textColor = .systemGray
         return label
     }
     
@@ -50,8 +54,15 @@ struct MechanicCellComponents {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Book Online", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .systemBlue
-        button.layer.cornerRadius = 8
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        button.backgroundColor = UIColor(named: "theme-bg") ?? .systemBlue
+        button.layer.cornerRadius = 22
+        
+        // Add shadow to button
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowOffset = CGSize(width: 0, height: 2)
+        button.layer.shadowRadius = 4
+        button.layer.shadowOpacity = 0.1
         return button
     }
 } 
