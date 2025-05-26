@@ -168,26 +168,45 @@ class MechanicDetailViewController: UIViewController {
         loadImage(from: mechanic.logo, into: logoImageView)
         loadImage(from: mechanic.bannerImage, into: headerImageView)
         
-        updateServices(mechanic.services)
-        updateAreas(mechanic.servicingAreas)
-        viewBuilder.setMapLocation(mapView: mapView, locations: mechanic.locations)
+        // Services section
+        if mechanic.services.isEmpty {
+            servicesHeaderLabel.isHidden = true
+            servicesStackView.isHidden = true
+        } else {
+            servicesHeaderLabel.isHidden = false
+            servicesStackView.isHidden = false
+            updateServices(mechanic.services)
+        }
         
-        print("Opening Hours to display: \(mechanic.openingHours)")
-        print("Hours table view is hidden: \(hoursTableView.isHidden)")
-        print("Hours table view frame after update: \(hoursTableView.frame)")
+        // Areas section
+        if mechanic.servicingAreas.isEmpty {
+            areasHeaderLabel.isHidden = true
+            areasStackView.isHidden = true
+        } else {
+            areasHeaderLabel.isHidden = false
+            areasStackView.isHidden = false
+            updateAreas(mechanic.servicingAreas)
+        }
         
-        hoursTableView.reloadData()
-        hoursTableView.layoutIfNeeded()
+        // Hours section
+        if mechanic.openingHours.isEmpty {
+            hoursHeaderLabel.isHidden = true
+            hoursTableView.isHidden = true
+        } else {
+            hoursHeaderLabel.isHidden = false
+            hoursTableView.isHidden = false
+            hoursTableView.reloadData()
+        }
         
-        // Force layout update
-        view.setNeedsLayout()
-        view.layoutIfNeeded()
-        
-        print("Hours table view frame after layout: \(hoursTableView.frame)")
-        
-        // Ensure table view is visible in scroll view
-        let tableViewRect = hoursTableView.convert(hoursTableView.bounds, to: scrollView)
-        scrollView.scrollRectToVisible(tableViewRect, animated: true)
+        // Location section
+        if mechanic.locations.isEmpty {
+            locationHeaderLabel.isHidden = true
+            mapView.isHidden = true
+        } else {
+            locationHeaderLabel.isHidden = false
+            mapView.isHidden = false
+            viewBuilder.setMapLocation(mapView: mapView, locations: mechanic.locations)
+        }
     }
     
     private func loadImage(from urlString: String?, into imageView: UIImageView) {
