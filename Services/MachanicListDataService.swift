@@ -102,11 +102,11 @@ class MachanicListDataService {
                 let apiResponse = try JSONDecoder().decode(APIResponse.self, from: data)
                 let mechanics = apiResponse.result.result.map { tenant in
                     let addressLine1 = [tenant.billStreetNumber, tenant.billStreetName]
-                        .compactMap { $0 }
+                        .compactMap { $0?.isEmpty ?? true ? nil : $0 }
                         .joined(separator: ", ")
                     
                     let addressLine2 = [tenant.billCity, tenant.billPostalCode, tenant.billRegion]
-                        .compactMap { $0 }
+                        .compactMap { $0?.isEmpty ?? true ? nil : $0 }
                         .joined(separator: ", ")
                     
                     return Mechanic(

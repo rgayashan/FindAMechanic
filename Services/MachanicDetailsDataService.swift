@@ -195,11 +195,12 @@ class MachanicDetailsDataService {
                 
                 // Create formatted address
                 let address = [
-                    "\(String(describing: tenant.billStreetNumber)), \(String(describing: tenant.billStreetName))",
-                    "\(String(describing: tenant.billCity)), \(String(describing: tenant.billPostalCode))",
+                    "\(tenant.billStreetNumber ?? ""), \(tenant.billStreetName ?? "")",
+                    "\(tenant.billCity ?? ""), \(tenant.billPostalCode ?? "")",
                     tenant.billRegion ?? "",
                     tenant.billCountry?.code ?? ""
-                ].joined(separator: "\n")
+                ].filter { !$0.isEmpty && $0 != ", " }
+                 .joined(separator: "\n")
                 
                 // Convert services
                 let formattedServices = tenantServices.map { Service(title: $0.title, description: $0.description) }
@@ -283,7 +284,8 @@ class MachanicDetailsDataService {
                         "\(tenant.billCity ?? ""), \(tenant.billPostalCode ?? "")",
                         tenant.billRegion ?? "",
                         tenant.billCountry?.code ?? ""
-                    ].joined(separator: "\n")
+                    ].filter { !$0.isEmpty && $0 != ", " }
+                     .joined(separator: "\n")
                     
                     // Create location
                     let location = MechanicLocation(
