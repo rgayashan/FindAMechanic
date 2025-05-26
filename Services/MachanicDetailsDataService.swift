@@ -195,8 +195,8 @@ class MachanicDetailsDataService {
                 
                 // Create formatted address
                 let address = [
-                    "\(tenant.billStreetNumber), \(tenant.billStreetName)",
-                    "\(tenant.billCity), \(tenant.billPostalCode)",
+                    "\(String(describing: tenant.billStreetNumber)), \(String(describing: tenant.billStreetName))",
+                    "\(String(describing: tenant.billCity)), \(String(describing: tenant.billPostalCode))",
                     tenant.billRegion ?? "",
                     tenant.billCountry?.code ?? ""
                 ].joined(separator: "\n")
@@ -302,7 +302,7 @@ class MachanicDetailsDataService {
                         licenseNumber: "N/A",
                         businessRegistrationNumber: "N/A",
                         logo: tenant.logo,
-                        bannerImage: "",
+                        bannerImage: tenant.bannerImage,
                         services: [],
                         servicingAreas: [],
                         openingHours: [],

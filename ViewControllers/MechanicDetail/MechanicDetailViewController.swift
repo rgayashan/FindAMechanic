@@ -166,7 +166,7 @@ class MechanicDetailViewController: UIViewController {
         phoneLabel.text = "Phone: \(mechanic.phone)"
         
         loadImage(from: mechanic.logo, into: logoImageView)
-//        loadImage(from: mechanic.headerImage, into: headerImageView)
+        loadImage(from: mechanic.bannerImage, into: headerImageView)
         
         updateServices(mechanic.services)
         updateAreas(mechanic.servicingAreas)

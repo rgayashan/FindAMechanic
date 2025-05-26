@@ -14,6 +14,7 @@ struct Mechanic: Codable {
     let addressLine2: String
     let phone: String
     let logoUrl: String?
+    let bannerImage: String?
     let latitude: Double?
     let longitude: Double?
     let specialties: [String]?

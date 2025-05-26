@@ -40,6 +40,7 @@ struct TenantListResponse: Codable {
     let businessName: String
     let phoneNumber: String
     let logo: String?
+    let bannerImage: String?
     let billStreetNumber: String?
     let billStreetName: String?
     let billCity: String?
@@ -115,6 +116,7 @@ class MachanicListDataService {
                         addressLine2: addressLine2.isEmpty ? "" : addressLine2,
                         phone: tenant.phoneNumber,
                         logoUrl: tenant.logo,
+                        bannerImage: tenant.bannerImage,
                         latitude: tenant.billLatitude,
                         longitude: tenant.billLongitude,
                         specialties: [], // API doesn't provide specialties
