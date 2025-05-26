@@ -88,7 +88,6 @@ class MachanicListDataService {
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
-                print("Network error: \(error)")
                 completion(.failure(.networkError))
                 return
             }
@@ -100,8 +99,6 @@ class MachanicListDataService {
             
             do {
                 let apiResponse = try JSONDecoder().decode(APIResponse.self, from: data)
-                print("apiResponse \(apiResponse)")
-                print("apiResponse123")
                 let mechanics = apiResponse.result.result.map { tenant in
                     let addressLine1 = [tenant.billStreetNumber, tenant.billStreetName]
                         .compactMap { $0 }

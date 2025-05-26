@@ -171,7 +171,6 @@ class MechanicListViewController: UIViewController {
     
     // MARK: - Navigation
     func navigateToDetail(for mechanic: Mechanic) {
-        print("Selected mechanic ID: \(mechanic.id)")
         let detailVC = MechanicDetailViewController()
         detailVC.mechanicID = mechanic.id
         navigationController?.pushViewController(detailVC, animated: true)
