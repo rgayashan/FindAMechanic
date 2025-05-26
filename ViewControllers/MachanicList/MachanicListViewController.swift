@@ -179,6 +179,7 @@ class MechanicListViewController: UIViewController {
                 updateSearchResults(filteredMechanics)
             } else {
                 tableHandler.reloadData()
+                animateCellsAfterReload()
             }
             
         case .failure:
@@ -190,6 +191,7 @@ class MechanicListViewController: UIViewController {
     func updateSearchResults(_ filtered: [Mechanic]) {
         filteredMechanics = filtered
         tableHandler.reloadData()
+        animateCellsAfterReload()
         showEmptyStateIfNeeded()
     }
     
@@ -213,6 +215,27 @@ class MechanicListViewController: UIViewController {
         let alert = UIAlertController(title: "Error", message: "Failed to load mechanics", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
+    }
+    
+    private func animateCellsAfterReload() {
+        let visibleCells = tableView.visibleCells
+        let totalCells = visibleCells.count
+        
+        for (index, cell) in visibleCells.enumerated() {
+            guard let mechanicCell = cell as? MechanicTableViewCell else { continue }
+            
+            // Calculate staggered delay based on cell position
+            let delay = Double(index) * 0.1 // 0.1 second delay between each cell
+            
+            if let containerView = mechanicCell.contentView.subviews.first {
+                // Reset initial state
+                containerView.transform = CGAffineTransform(translationX: 0, y: 50)
+                containerView.alpha = 0
+                
+                // Apply staggered animation
+                MechanicCellAnimator.applyAppearAnimation(to: mechanicCell, containerView: containerView, withDelay: delay)
+            }
+        }
     }
     
     // MARK: - Navigation

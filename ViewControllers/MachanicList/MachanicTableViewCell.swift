@@ -102,6 +102,10 @@ class MechanicTableViewCell: UITableViewCell {
         } else {
             logoImageView.image = UIImage(named: "placeholder")
         }
+        
+        // Apply initial animations
+        MechanicCellAnimator.applyAppearAnimation(to: self, containerView: containerView)
+        MechanicCellAnimator.applyBookButtonAnimation(to: bookButton)
     }
     
     private func loadImage(from urlString: String) {
@@ -114,9 +118,17 @@ class MechanicTableViewCell: UITableViewCell {
         }
     }
     
+    // MARK: - Highlight Handling
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        super.setHighlighted(highlighted, animated: animated)
+        MechanicCellAnimator.applyHighlightAnimation(to: containerView, isHighlighted: highlighted)
+    }
+    
     // MARK: - Actions
     @objc private func bookButtonTapped() {
         guard let mechanic = self.mechanic else { return }
-        delegate?.didTapBookButton(for: mechanic)
+        MechanicCellAnimator.applyTapAnimation(to: bookButton) { [weak self] in
+            self?.delegate?.didTapBookButton(for: mechanic)
+        }
     }
 }
