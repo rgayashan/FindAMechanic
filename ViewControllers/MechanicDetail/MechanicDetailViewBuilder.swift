@@ -4,34 +4,52 @@ import MapKit
 class MechanicDetailViewBuilder {
     func createServiceView(service: Service) -> UIView {
         let containerView = UIView()
+        containerView.backgroundColor = .white
+        containerView.layer.cornerRadius = 12
+        containerView.layer.shadowColor = UIColor.black.cgColor
+        containerView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        containerView.layer.shadowRadius = 4
+        containerView.layer.shadowOpacity = 0.1
         
         let titleLabel = UILabel()
         titleLabel.text = service.title
-        titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        titleLabel.font = .systemFont(ofSize: 18, weight: .bold)
         titleLabel.textColor = UIColor(red: 0.25, green: 0.47, blue: 0.68, alpha: 1.0)
         titleLabel.numberOfLines = 0
         
         let descriptionLabel = UILabel()
         descriptionLabel.text = service.description
-        descriptionLabel.font = UIFont.systemFont(ofSize: 16)
+        descriptionLabel.font = .systemFont(ofSize: 16)
         descriptionLabel.textColor = .darkGray
         descriptionLabel.numberOfLines = 0
         
+        let iconView = UIImageView()
+        iconView.image = UIImage(systemName: "wrench.and.screwdriver.fill")
+        iconView.tintColor = UIColor(red: 0.25, green: 0.47, blue: 0.68, alpha: 1.0)
+        iconView.contentMode = .scaleAspectFit
+        
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
+        iconView.translatesAutoresizingMaskIntoConstraints = false
         
+        containerView.addSubview(iconView)
         containerView.addSubview(titleLabel)
         containerView.addSubview(descriptionLabel)
         
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            iconView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
+            iconView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
+            iconView.widthAnchor.constraint(equalToConstant: 24),
+            iconView.heightAnchor.constraint(equalToConstant: 24),
+            
+            titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
+            titleLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 12),
+            titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
             
             descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
-            descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            descriptionLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+            descriptionLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 12),
+            descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
+            descriptionLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -16)
         ])
         
         return containerView
@@ -39,71 +57,84 @@ class MechanicDetailViewBuilder {
     
     func createAreasView(areas: [ServiceArea]) -> UIView {
         let containerView = UIView()
+        containerView.backgroundColor = .white
+        containerView.layer.cornerRadius = 12
+        containerView.layer.shadowColor = UIColor.black.cgColor
+        containerView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        containerView.layer.shadowRadius = 4
+        containerView.layer.shadowOpacity = 0.1
+        
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.spacing = 8
-        stackView.distribution = .fill
-        stackView.alignment = .fill
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Group areas by postal code
-        let groupedAreas = Dictionary(grouping: areas) { $0.postalCode }
-        let sortedPostalCodes = groupedAreas.keys.sorted()
-        
-        for postalCode in sortedPostalCodes {
-            if let areas = groupedAreas[postalCode] {
-                let areaNames = areas.map { $0.cityName }.sorted()
-                let areaText = "\(areaNames.joined(separator: ", ")) - \(postalCode)"
-                
-                let label = UILabel()
-                label.text = areaText
-                label.font = UIFont.systemFont(ofSize: 16)
-                label.textColor = .darkGray
-                label.numberOfLines = 0
-                
-                stackView.addArrangedSubview(label)
-            }
-        }
-        
         containerView.addSubview(stackView)
         
+        for area in areas {
+            let areaView = createAreaItemView(area: area)
+            stackView.addArrangedSubview(areaView)
+        }
+        
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            stackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+            stackView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
+            stackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
+            stackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
+            stackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -16)
+        ])
+        
+        return containerView
+    }
+    
+    private func createAreaItemView(area: ServiceArea) -> UIView {
+        let containerView = UIView()
+        
+        let iconView = UIImageView()
+        iconView.image = UIImage(systemName: "location.circle.fill")
+        iconView.tintColor = UIColor(red: 0.25, green: 0.47, blue: 0.68, alpha: 1.0)
+        iconView.contentMode = .scaleAspectFit
+        
+        let nameLabel = UILabel()
+        nameLabel.text = "\(area.cityName) - \(area.postalCode)"
+        nameLabel.font = .systemFont(ofSize: 16, weight: .medium)
+        nameLabel.textColor = .darkGray
+        
+        iconView.translatesAutoresizingMaskIntoConstraints = false
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        containerView.addSubview(iconView)
+        containerView.addSubview(nameLabel)
+        
+        NSLayoutConstraint.activate([
+            iconView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            iconView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            iconView.widthAnchor.constraint(equalToConstant: 20),
+            iconView.heightAnchor.constraint(equalToConstant: 20),
+            
+            nameLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            nameLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 8),
+            nameLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            
+            containerView.heightAnchor.constraint(equalToConstant: 28)
         ])
         
         return containerView
     }
     
     func setMapLocation(mapView: MKMapView, locations: [MechanicLocation]) {
-        // Remove existing annotations
-        mapView.removeAnnotations(mapView.annotations)
+        guard let firstLocation = locations.first else { return }
         
-        // Add new annotations for each location
+        let region = MKCoordinateRegion(
+            center: firstLocation.coordinate,
+            span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+        )
+        mapView.setRegion(region, animated: false)
+        
         for location in locations {
             let annotation = MKPointAnnotation()
             annotation.coordinate = location.coordinate
             annotation.title = location.name
             annotation.subtitle = location.address
-            
             mapView.addAnnotation(annotation)
-        }
-        
-        // If there are locations, set the map region to fit all locations
-        if !locations.isEmpty {
-            var zoomRect = MKMapRect.null
-            
-            for location in locations {
-                let point = MKMapPoint(location.coordinate)
-                let pointRect = MKMapRect(x: point.x - 1000, y: point.y - 1000, width: 2000, height: 2000)
-                zoomRect = zoomRect.isNull ? pointRect : zoomRect.union(pointRect)
-            }
-            
-            // Add some padding around the annotations
-            let insets = UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50)
-            mapView.setVisibleMapRect(zoomRect, edgePadding: insets, animated: true)
         }
     }
     

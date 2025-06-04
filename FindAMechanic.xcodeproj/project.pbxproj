@@ -67,57 +67,41 @@
 		};
 		077141A52DBBBF950013FC1A /* FindAMechanicTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = FindAMechanicTests;
 			sourceTree = "<group>";
 		};
 		077141AF2DBBBF950013FC1A /* FindAMechanicUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = FindAMechanicUITests;
 			sourceTree = "<group>";
 		};
 		077141C32DBBC1650013FC1A /* ViewControllers */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = ViewControllers;
 			sourceTree = "<group>";
 		};
 		077141D02DBBC2E90013FC1A /* Storyboards */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = Storyboards;
 			sourceTree = "<group>";
 		};
 		077141D12DBBC2FC0013FC1A /* Models */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = Models;
 			sourceTree = "<group>";
 		};
 		077141D52DBBC3190013FC1A /* Services */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = Services;
 			sourceTree = "<group>";
 		};
 		077141D62DBBC3340013FC1A /* Utilities */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = Utilities;
 			sourceTree = "<group>";
 		};
 		077141E92DBBC3A50013FC1A /* Resources */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = Resources;
 			sourceTree = "<group>";
 		};
@@ -379,9 +363,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FindAMechanic/Pods-FindAMechanic-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FindAMechanic/Pods-FindAMechanic-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -440,9 +428,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FindAMechanic-FindAMechanicUITests/Pods-FindAMechanic-FindAMechanicUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FindAMechanic-FindAMechanicUITests/Pods-FindAMechanic-FindAMechanicUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -497,7 +489,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = MP32X3M4H8;
+				DEVELOPMENT_TEAM = TQ7HJYRKZ7;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FindAMechanic/Info.plist;
@@ -512,7 +504,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.vemas.Find-a-Mechanic";
+				PRODUCT_BUNDLE_IDENTIFIER = com.vemas.FindMechanic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -528,7 +520,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = MP32X3M4H8;
+				DEVELOPMENT_TEAM = TQ7HJYRKZ7;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FindAMechanic/Info.plist;
@@ -543,7 +535,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.vemas.Find-a-Mechanic";
+				PRODUCT_BUNDLE_IDENTIFIER = com.vemas.FindMechanic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

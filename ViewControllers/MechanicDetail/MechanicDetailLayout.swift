@@ -41,84 +41,75 @@ class MechanicDetailLayout {
         locationHeaderLabel: UILabel,
         mapView: UIView
     ) {
-        let padding: CGFloat = 16
-        let sectionSpacing: CGFloat = 20 // Reduced from padding * 2
-        let headerHeight: CGFloat = 40 // Reduced from 50
+        let padding: CGFloat = 20 // Increased padding
+        let sectionSpacing: CGFloat = 32 // Increased section spacing
+        let headerHeight: CGFloat = 44 // Slightly increased header height
         
         // Store constraints that need to be updated when sections are hidden
         var constraints: [NSLayoutConstraint] = []
         
-        // Basic info constraints (always visible)
+        // Header and basic info constraints
         constraints += [
             headerImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             headerImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             headerImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             headerImageView.heightAnchor.constraint(equalToConstant: 200),
             
-            logoImageView.topAnchor.constraint(equalTo: headerImageView.bottomAnchor, constant: padding),
+            logoImageView.topAnchor.constraint(equalTo: headerImageView.bottomAnchor, constant: -40),
             logoImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
-            logoImageView.widthAnchor.constraint(equalToConstant: 80),
-            logoImageView.heightAnchor.constraint(equalToConstant: 80),
+            logoImageView.widthAnchor.constraint(equalToConstant: 100),
+            logoImageView.heightAnchor.constraint(equalToConstant: 100),
             
-            nameLabel.topAnchor.constraint(equalTo: headerImageView.bottomAnchor, constant: padding),
-            nameLabel.leadingAnchor.constraint(equalTo: logoImageView.trailingAnchor, constant: padding),
+            nameLabel.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 12),
+            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
             nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
             
-            addressLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4), // Reduced from 8
-            addressLabel.leadingAnchor.constraint(equalTo: logoImageView.trailingAnchor, constant: padding),
+            addressLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8),
+            addressLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
             addressLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
             
-            phoneLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 4), // Reduced from 8
-            phoneLabel.leadingAnchor.constraint(equalTo: logoImageView.trailingAnchor, constant: padding),
-            phoneLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding)
-        ]
-        
-        // Services section constraints
-        let servicesTopAnchor = max(logoImageView.bottomAnchor, phoneLabel.bottomAnchor)
-        constraints += [
-            servicesHeaderLabel.topAnchor.constraint(equalTo: servicesTopAnchor, constant: sectionSpacing),
-            servicesHeaderLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            servicesHeaderLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            phoneLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 8),
+            phoneLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
+            phoneLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
+            
+            // Services section
+            servicesHeaderLabel.topAnchor.constraint(equalTo: phoneLabel.bottomAnchor, constant: sectionSpacing),
+            servicesHeaderLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
+            servicesHeaderLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
             servicesHeaderLabel.heightAnchor.constraint(equalToConstant: headerHeight),
             
-            servicesStackView.topAnchor.constraint(equalTo: servicesHeaderLabel.bottomAnchor, constant: 8), // Reduced from padding
+            servicesStackView.topAnchor.constraint(equalTo: servicesHeaderLabel.bottomAnchor, constant: 12),
             servicesStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
-            servicesStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding)
-        ]
-        
-        // Areas section constraints
-        constraints += [
+            servicesStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
+            
+            // Areas section
             areasHeaderLabel.topAnchor.constraint(equalTo: servicesStackView.bottomAnchor, constant: sectionSpacing),
-            areasHeaderLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            areasHeaderLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            areasHeaderLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
+            areasHeaderLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
             areasHeaderLabel.heightAnchor.constraint(equalToConstant: headerHeight),
             
-            areasStackView.topAnchor.constraint(equalTo: areasHeaderLabel.bottomAnchor, constant: 8), // Reduced from padding
+            areasStackView.topAnchor.constraint(equalTo: areasHeaderLabel.bottomAnchor, constant: 12),
             areasStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
-            areasStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding)
-        ]
-        
-        // Hours section constraints
-        constraints += [
+            areasStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
+            
+            // Hours section
             hoursHeaderLabel.topAnchor.constraint(equalTo: areasStackView.bottomAnchor, constant: sectionSpacing),
-            hoursHeaderLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            hoursHeaderLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            hoursHeaderLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
+            hoursHeaderLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
             hoursHeaderLabel.heightAnchor.constraint(equalToConstant: headerHeight),
             
-            hoursTableView.topAnchor.constraint(equalTo: hoursHeaderLabel.bottomAnchor, constant: 8), // Reduced from padding
+            hoursTableView.topAnchor.constraint(equalTo: hoursHeaderLabel.bottomAnchor, constant: 12),
             hoursTableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
             hoursTableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
-            hoursTableView.heightAnchor.constraint(equalToConstant: 44 * 7 + 1)
-        ]
-        
-        // Location section constraints
-        constraints += [
+            hoursTableView.heightAnchor.constraint(equalToConstant: 44 * 7 + 1),
+            
+            // Location section
             locationHeaderLabel.topAnchor.constraint(equalTo: hoursTableView.bottomAnchor, constant: sectionSpacing),
-            locationHeaderLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            locationHeaderLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            locationHeaderLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
+            locationHeaderLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
             locationHeaderLabel.heightAnchor.constraint(equalToConstant: headerHeight),
             
-            mapView.topAnchor.constraint(equalTo: locationHeaderLabel.bottomAnchor, constant: 8), // Reduced from padding
+            mapView.topAnchor.constraint(equalTo: locationHeaderLabel.bottomAnchor, constant: 12),
             mapView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
             mapView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
             mapView.heightAnchor.constraint(equalToConstant: 200),
