@@ -87,7 +87,7 @@ class MechanicListViewController: UIViewController {
     
     private func setupEmptyStateView() {
         emptyStateView.isHidden = true
-        emptyStateView.backgroundColor = .systemGroupedBackground
+        emptyStateView.backgroundColor = .white
         
         let stackView = UIStackView()
         stackView.axis = .vertical
@@ -103,13 +103,13 @@ class MechanicListViewController: UIViewController {
         
         let titleLabel = UILabel()
         titleLabel.text = "No Mechanics Found"
+        titleLabel.textColor = .black
         titleLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-        titleLabel.textColor = .label
         
         let messageLabel = UILabel()
         messageLabel.text = "Try adjusting your search to find what you're looking for."
         messageLabel.font = UIFont.systemFont(ofSize: 16)
-        messageLabel.textColor = .secondaryLabel
+        messageLabel.textColor = .darkGray
         messageLabel.textAlignment = .center
         messageLabel.numberOfLines = 0
         
