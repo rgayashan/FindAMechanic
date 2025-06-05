@@ -65,16 +65,6 @@
 			path = FindAMechanic;
 			sourceTree = "<group>";
 		};
-		077141A52DBBBF950013FC1A /* FindAMechanicTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = FindAMechanicTests;
-			sourceTree = "<group>";
-		};
-		077141AF2DBBBF950013FC1A /* FindAMechanicUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = FindAMechanicUITests;
-			sourceTree = "<group>";
-		};
 		077141C32DBBC1650013FC1A /* ViewControllers */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = ViewControllers;
@@ -146,8 +136,6 @@
 				077141D02DBBC2E90013FC1A /* Storyboards */,
 				077141C32DBBC1650013FC1A /* ViewControllers */,
 				0771418E2DBBBF920013FC1A /* FindAMechanic */,
-				077141A52DBBBF950013FC1A /* FindAMechanicTests */,
-				077141AF2DBBBF950013FC1A /* FindAMechanicUITests */,
 				0771418D2DBBBF920013FC1A /* Products */,
 				B1ABA3F1D8930AA227227311 /* Pods */,
 				BD65B42579AA27711334226E /* Frameworks */,
@@ -232,9 +220,6 @@
 			dependencies = (
 				077141A42DBBBF950013FC1A /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				077141A52DBBBF950013FC1A /* FindAMechanicTests */,
-			);
 			name = FindAMechanicTests;
 			productName = "Find a MechanicTests";
 			productReference = 077141A22DBBBF950013FC1A /* FindAMechanicTests.xctest */;
@@ -254,9 +239,6 @@
 			);
 			dependencies = (
 				077141AE2DBBBF950013FC1A /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				077141AF2DBBBF950013FC1A /* FindAMechanicUITests */,
 			);
 			name = FindAMechanicUITests;
 			productName = "Find a MechanicUITests";

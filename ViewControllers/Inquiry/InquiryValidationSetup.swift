@@ -1,3 +1,10 @@
+//
+//  InquiryValidationSetup.swift
+//  FindAMechanic
+//
+//  Created by Rajitha Gayashan on 2025-04-28.
+//
+
 import UIKit
 
 class InquiryValidationSetup {

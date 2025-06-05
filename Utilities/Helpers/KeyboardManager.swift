@@ -1,3 +1,10 @@
+//
+//  KeyboardManager.swift
+//  Find a Mechanic
+//
+//  Created by Rajitha Gayashan on 2025-04-25.
+//
+
 import UIKit
 
 /// A reusable class to handle keyboard appearance and dismissal

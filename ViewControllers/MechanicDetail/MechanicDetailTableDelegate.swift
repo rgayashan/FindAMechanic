@@ -1,3 +1,10 @@
+//
+//  MechanicDetailTableDelegate.swift
+//  Find a Mechanic
+//
+//  Created by Rajitha Gayashan on 2025-04-26.
+//
+
 import UIKit
 
 class MechanicDetailTableDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {

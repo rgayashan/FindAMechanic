@@ -1,3 +1,10 @@
+//
+//  BaseViewController.swift
+//  Find a Mechanic
+//
+//  Created by Rajitha Gayashan on 2025-04-26.
+//
+
 import UIKit
 
 /// A base view controller class that implements ViewControllerSetupProtocol

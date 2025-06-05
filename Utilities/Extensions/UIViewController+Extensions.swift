@@ -5,7 +5,6 @@
 //  Created by Rajitha Gayashan on 2025-04-28.
 //
 
-// Utilities/Extensions/UIViewController+Extensions.swift
 import UIKit
 
 extension UIViewController {

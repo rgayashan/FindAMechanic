@@ -1,3 +1,10 @@
+//
+//  AnimationUtility.swift
+//  Find a Mechanic
+//
+//  Created by Rajitha Gayashan on 2025-04-25.
+//
+
 import UIKit
 
 /// Utility class for common animations used across the app

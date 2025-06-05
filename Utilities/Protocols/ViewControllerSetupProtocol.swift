@@ -1,3 +1,10 @@
+//
+//  ViewControllerSetupProtocol.swift
+//  Find a Mechanic
+//
+//  Created by Rajitha Gayashan on 2025-04-25.
+//
+
 import UIKit
 
 /// Protocol that defines standard methods for setting up view controllers

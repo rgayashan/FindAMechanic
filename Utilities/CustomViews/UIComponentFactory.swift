@@ -1,3 +1,10 @@
+//
+//  UIComponentFactory.swift
+//  Find a Mechanic
+//
+//  Created by Rajitha Gayashan on 2025-04-26.
+//
+
 import UIKit
 
 /// A factory class for creating common UI components with consistent styling

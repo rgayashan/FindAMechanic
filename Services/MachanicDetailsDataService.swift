@@ -1,5 +1,5 @@
 //
-//  MachanicListDataService.swift
+//  MachanicDetailsDataService.swift
 //  Find a Mechanic
 //
 //  Created by Rajitha Gayashan on 2025-04-26.

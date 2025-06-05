@@ -1,3 +1,11 @@
+//
+//  MechanicCellAnimator.swift
+//  Find a Mechanic
+//
+//  Created by Rajitha Gayashan on 2025-04-25.
+//
+//
+
 import UIKit
 
 class MechanicCellAnimator {
