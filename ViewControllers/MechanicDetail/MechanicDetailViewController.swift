@@ -284,7 +284,8 @@ class MechanicDetailViewController: UIViewController {
     }
     
     @objc private func inquiryButtonTapped() {
-        InquiryPopupHelper.showInquiryPopup(from: self, delegate: self)
+        guard let mechanic = mechanic else { return }
+        InquiryPopupHelper.showInquiryPopup(from: self, mechanicName: mechanic.name, delegate: self)
     }
     
     // MARK: - Public Methods

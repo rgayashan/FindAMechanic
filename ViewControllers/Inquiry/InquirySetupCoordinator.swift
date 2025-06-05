@@ -152,6 +152,15 @@ class InquirySetupCoordinator {
     private func setupDatePicker(_ datePicker: UIDatePicker, forField datePickerField: UITextField) {
         guard let viewController = viewController else { return }
         
+        // Ensure date-only mode
+        datePicker.datePickerMode = .date
+        datePicker.preferredDatePickerStyle = .wheels
+        
+        // Set a date formatter to ensure only date is handled
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .none  // Explicitly no time
+        
         let toolbar = InquiryUIFactory.createDatePickerToolbar(
             doneTarget: viewController, doneAction: #selector(InquiryPopupViewController.datePickerDone),
             cancelTarget: viewController, cancelAction: #selector(InquiryPopupViewController.datePickerCancel)
@@ -159,6 +168,9 @@ class InquirySetupCoordinator {
         
         datePickerField.inputView = datePicker
         datePickerField.inputAccessoryView = toolbar
+        
+        // Set initial date display
+//        datePickerField.text = dateFormatter.string(from: datePicker.date)
     }
     
     // Public methods for controller to use

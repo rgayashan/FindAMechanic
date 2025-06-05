@@ -31,9 +31,9 @@ class InquiryValidationDisplay {
         errorLabel.text = result.errorMessage
         errorLabel.isHidden = result.isValid
         
-        // Add visual indicator to the text field
-        textField.layer.borderWidth = result.isValid ? 0 : 1
-        textField.layer.borderColor = result.isValid ? UIColor.clear.cgColor : UIColor.red.cgColor
+        // Always show border, only change color on error
+        textField.layer.borderWidth = 1
+        textField.layer.borderColor = result.isValid ? UIColor.lightGray.cgColor : UIColor.red.cgColor
     }
     
     func clearAllValidationErrors() {

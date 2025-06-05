@@ -12,8 +12,9 @@ struct InquiryUIFactory {
     static func createTitleLabel(title: String) -> UILabel {
         let label = UILabel()
         label.text = title
-        label.font = UIFont.boldSystemFont(ofSize: 20)
+        label.font = UIFont.boldSystemFont(ofSize: 20)  
         label.textAlignment = .center
+        label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }
@@ -29,19 +30,33 @@ struct InquiryUIFactory {
     static func createTextField(placeholder: String, keyboardType: UIKeyboardType = .default) -> UITextField {
         let textField = UITextField()
         textField.placeholder = placeholder
-        textField.borderStyle = .roundedRect
         textField.keyboardType = keyboardType
         textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.backgroundColor = .white
+        textField.textColor = .darkGray
+        textField.layer.borderWidth = 1
+        textField.layer.borderColor = UIColor.lightGray.cgColor
+        textField.layer.cornerRadius = 5
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: textField.frame.height))
+        textField.leftView = paddingView
+        textField.leftViewMode = .always
+        textField.attributedPlaceholder = NSAttributedString(
+            string: placeholder,
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray]
+        )
         return textField
     }
     
     static func createMessageTextView() -> UITextView {
         let textView = UITextView()
-        textView.layer.borderWidth = 0.5
+        textView.layer.borderWidth = 1
         textView.layer.borderColor = UIColor.lightGray.cgColor
         textView.layer.cornerRadius = 5
         textView.font = UIFont.systemFont(ofSize: 16)
         textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.backgroundColor = .white
+        textView.textColor = .darkGray
+        textView.textContainerInset = UIEdgeInsets(top: 8, left: 4, bottom: 8, right: 4)
         return textView
     }
     

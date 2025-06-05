@@ -14,13 +14,14 @@ protocol InquiryPopupDelegate: AnyObject {
 class InquiryPopupViewController: UIViewController {
     
     // MARK: - Properties
+    var mechanicName: String?
     private var setupCoordinator: InquirySetupCoordinator!
     private var datePicker = UIDatePicker()
     weak var delegate: InquiryPopupDelegate?
     
     // MARK: - UI Elements
     private let containerView = InquiryUIFactory.createContainerView()
-    private let titleLabel = InquiryUIFactory.createTitleLabel(title: "Celtic Car Sound")
+    private var titleLabel: UILabel!
     private let closeButton = InquiryUIFactory.createCloseButton()
     private let vehicleRegistrationTextField = InquiryUIFactory.createTextField(placeholder: "Enter Vehicle Registration No")
     private let nameTextField = InquiryUIFactory.createTextField(placeholder: "Enter Name")
@@ -34,6 +35,10 @@ class InquiryPopupViewController: UIViewController {
     // MARK: - Lifecycle & Setup
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Use mechanicName for the title label
+        let displayName = mechanicName ?? "Mechanic"
+        titleLabel = InquiryUIFactory.createTitleLabel(title: displayName)
         
         // Create form elements
         let formElements = FormElements(
