@@ -23,7 +23,7 @@ class MechanicListSearchHandler: NSObject {
     private func setupSearchBar() {
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Search mechanics by name or location"
+        searchController.searchBar.placeholder = "Search mechanics by name or suburb"
         
         if let textField = searchController.searchBar.value(forKey: "searchField") as? UITextField {
             textField.textColor = .black
