@@ -289,7 +289,7 @@ class MechanicDetailViewController: UIViewController {
     
     @objc private func inquiryButtonTapped() {
         guard let mechanic = mechanic else { return }
-        InquiryPopupHelper.showInquiryPopup(from: self, mechanicName: mechanic.name, delegate: self)
+        InquiryPopupHelper.showInquiryPopup(from: self, mechanicName: mechanic.name, delegate: self, tenantId: mechanic.tenantId)
     }
     
     @objc private func phoneLabelTapped() {

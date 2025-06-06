@@ -9,9 +9,10 @@ import UIKit
 
 class InquiryPopupHelper {
     
-    static func showInquiryPopup(from viewController: UIViewController, mechanicName: String, delegate: InquiryPopupDelegate?) {
+    static func showInquiryPopup(from viewController: UIViewController, mechanicName: String, delegate: InquiryPopupDelegate?, tenantId: Int) {
         let popupVC = InquiryPopupViewController()
         popupVC.mechanicName = mechanicName
+        popupVC.tenantId = tenantId
         popupVC.modalPresentationStyle = .overCurrentContext
         popupVC.modalTransitionStyle = .crossDissolve
         popupVC.delegate = delegate

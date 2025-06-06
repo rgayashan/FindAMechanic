@@ -170,6 +170,7 @@ struct MechanicDetails {
     let openingHours: [OpeningHour]
     let locations: [MechanicLocation]
     let price: Double
+    let tenantId: Int
 }
 
 struct MechanicLocation {

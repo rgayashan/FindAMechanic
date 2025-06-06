@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Foundation
 
 protocol InquiryPopupDelegate: AnyObject {
     func inquirySubmitted(inquiry: InquiryForm)
@@ -18,6 +19,7 @@ class InquiryPopupViewController: UIViewController {
     private var setupCoordinator: InquirySetupCoordinator!
     private var datePicker = UIDatePicker()
     weak var delegate: InquiryPopupDelegate?
+    var tenantId: Int = 0
     
     // MARK: - UI Elements
     private let containerView = InquiryUIFactory.createContainerView()
@@ -81,7 +83,8 @@ class InquiryPopupViewController: UIViewController {
             cancelAction: {},
             confirmAction: { [weak self] in
                 guard let self = self else { return }
-                self.delegate?.inquirySubmitted(inquiry: self.setupCoordinator.getInquiryForm())
+                let inquiry = self.setupCoordinator.getInquiryForm()
+                self.submitInquiry(inquiry: inquiry)
                 self.dismiss(animated: true)
             }
         )
@@ -110,5 +113,82 @@ class InquiryPopupViewController: UIViewController {
         else if phoneNumberTextField.isFirstResponder { return phoneNumberTextField }
         else if datePickerField.isFirstResponder { return datePickerField }
         return nil
+    }
+    
+    private func submitInquiry(inquiry: InquiryForm) {
+        let baseURL = APIConstants.baseURL
+        guard let url = URL(string: "\(baseURL)/api/bookings1/inquiry") else { return }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let dateFormatter = ISO8601DateFormatter()
+        let dateString = dateFormatter.string(from: inquiry.date!)
+        
+        let payload: [String: Any] = [
+            "tenantId": self.tenantId,
+            "vehicleRegistrationNumber": inquiry.vehicleRegistration,
+            "RequestedDate": dateString,
+            "PlanStartDate": dateString,
+            "PlanEndDate": dateString,
+            "DropOffDate": dateString,
+            "PickUpDate": dateString,
+            "CustomerName": inquiry.name,
+            "CustomerContactName": inquiry.phoneNumber,
+            "CustomerEmail": inquiry.email,
+            "CustomerPhone": inquiry.phoneNumber,
+            "Notes": inquiry.message,
+            "Status": "50",
+            "ObjectId": "BOKING",
+            "Channel": "02"
+        ]
+        
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: payload, options: .fragmentsAllowed)
+        } catch {
+            showToast(message: "Failed to encode request.")
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            guard let self = self else { return }
+            if let error = error {
+                DispatchQueue.main.async {
+                    self.showToast(message: "Error: \(error.localizedDescription)")
+                }
+                return
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
+                DispatchQueue.main.async {
+                    self.showToast(message: "Server error.")
+                }
+                return
+            }
+            
+            DispatchQueue.main.async {
+                self.showToast(message: "Success! Booking request was submitted.")
+            }
+        }
+        
+        task.resume()
+    }
+    
+    private func showToast(message: String) {
+        let toastLabel = UILabel(frame: CGRect(x: self.view.frame.size.width/2 - 75, y: self.view.frame.size.height-100, width: 150, height: 35))
+        toastLabel.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+        toastLabel.textColor = UIColor.white
+        toastLabel.textAlignment = .center;
+        toastLabel.font = UIFont(name: "Montserrat-Light", size: 12.0)
+        toastLabel.text = message
+        toastLabel.alpha = 1.0
+        toastLabel.layer.cornerRadius = 10;
+        toastLabel.clipsToBounds  =  true
+        self.view.addSubview(toastLabel)
+        UIView.animate(withDuration: 4.0, delay: 0.1, options: .curveEaseOut, animations: {
+            toastLabel.alpha = 0.0
+        }, completion: {(isCompleted) in
+            toastLabel.removeFromSuperview()
+        })
     }
 }

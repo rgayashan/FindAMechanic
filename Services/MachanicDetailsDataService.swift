@@ -246,7 +246,8 @@ class MachanicDetailsDataService {
                     servicingAreas: areas,
                     openingHours: formattedHours,
                     locations: locations,
-                    price: tenant.price ?? 0
+                    price: tenant.price ?? 0,
+                    tenantId: tenant.id!
                 )
                 
                 DispatchQueue.main.async {
@@ -319,7 +320,8 @@ class MachanicDetailsDataService {
                         servicingAreas: [],
                         openingHours: [],
                         locations: locations,
-                        price: 0.0
+                        price: 0.0,
+                        tenantId: tenant.id
                     )
                 }
                 
