@@ -85,7 +85,6 @@ class InquiryPopupViewController: UIViewController {
                 guard let self = self else { return }
                 let inquiry = self.setupCoordinator.getInquiryForm()
                 self.submitInquiry(inquiry: inquiry)
-                self.dismiss(animated: true)
             }
         )
         present(alert, animated: true)
@@ -115,9 +114,60 @@ class InquiryPopupViewController: UIViewController {
         return nil
     }
     
+    private func showToast(message: String, dismissPopupAfter: Bool = false) {
+        // Calculate the width needed for the message
+        let font = UIFont(name: "Montserrat-Light", size: 10.0) ?? UIFont.systemFont(ofSize: 10.0)
+        let messageSize = (message as NSString).size(withAttributes: [.font: font])
+        
+        // Add padding and ensure minimum and maximum width
+        let padding: CGFloat = 20
+        let minWidth: CGFloat = 150
+        let maxWidth = self.view.frame.width - 40 // 20 points padding on each side
+        let toastWidth = min(max(messageSize.width + padding * 2, minWidth), maxWidth)
+        
+        // Calculate height based on the text wrapping
+        let toastLabel = UILabel()
+        toastLabel.font = font
+        toastLabel.numberOfLines = 0 // Allow multiple lines
+        toastLabel.text = message
+        
+        let height: CGFloat = 40 // Minimum height
+        
+        // Position the toast at the bottom of the screen
+        let xPos = (self.view.frame.width - toastWidth) / 2
+        let yPos = self.view.frame.height - height - 100 // 100 points from bottom
+        
+        toastLabel.frame = CGRect(x: xPos, y: yPos, width: toastWidth, height: height)
+        toastLabel.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+        toastLabel.textColor = UIColor.white
+        toastLabel.textAlignment = .center
+        toastLabel.alpha = 1.0
+        toastLabel.layer.cornerRadius = 10
+        toastLabel.clipsToBounds = true
+        
+        // Add padding to the text
+        toastLabel.layoutMargins = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
+        
+        self.view.addSubview(toastLabel)
+        
+        UIView.animate(withDuration: 4.0, delay: 0.1, options: .curveEaseOut, animations: {
+            toastLabel.alpha = 0.0
+        }, completion: { [weak self] _ in
+            toastLabel.removeFromSuperview()
+            if dismissPopupAfter {
+                DispatchQueue.main.async {
+                    self?.dismiss(animated: true)
+                }
+            }
+        })
+    }
+    
     private func submitInquiry(inquiry: InquiryForm) {
         let baseURL = APIConstants.baseURL
-        guard let url = URL(string: "\(baseURL)/api/bookings1/inquiry") else { return }
+        guard let url = URL(string: "\(baseURL)/api/bookings") else {
+            showToast(message: "Invalid URL configuration")
+            return 
+        }
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -146,49 +196,48 @@ class InquiryPopupViewController: UIViewController {
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: payload, options: .fragmentsAllowed)
         } catch {
-            showToast(message: "Failed to encode request.")
+            DispatchQueue.main.async {
+                self.showToast(message: "Failed to process your request. Please try again.")
+            }
             return
+        }
+        
+        // Show loading toast
+        DispatchQueue.main.async {
+            self.showToast(message: "Submitting inquiry...")
         }
         
         let task = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
             guard let self = self else { return }
-            if let error = error {
-                DispatchQueue.main.async {
-                    self.showToast(message: "Error: \(error.localizedDescription)")
-                }
-                return
-            }
-            
-            guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
-                DispatchQueue.main.async {
-                    self.showToast(message: "Server error.")
-                }
-                return
-            }
             
             DispatchQueue.main.async {
-                self.showToast(message: "Success! Booking request was submitted.")
+                if let error = error {
+                    self.showToast(message: "Network error: Please check your connection")
+                    return
+                }
+                
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    self.showToast(message: "Invalid server response")
+                    return
+                }
+                
+                switch httpResponse.statusCode {
+                case 200...299:
+                    self.delegate?.inquirySubmitted(inquiry: inquiry)
+                    // Show success toast and dismiss after it completes
+                    self.showToast(message: "Success! Your inquiry has been submitted", dismissPopupAfter: true)
+                case 400:
+                    self.showToast(message: "Invalid request. Please check your details")
+                case 401:
+                    self.showToast(message: "Authentication failed")
+                case 500:
+                    self.showToast(message: "Server error. Please try again later")
+                default:
+                    self.showToast(message: "Error: Unable to submit inquiry (Status: \(httpResponse.statusCode))")
+                }
             }
         }
         
         task.resume()
-    }
-    
-    private func showToast(message: String) {
-        let toastLabel = UILabel(frame: CGRect(x: self.view.frame.size.width/2 - 75, y: self.view.frame.size.height-100, width: 150, height: 35))
-        toastLabel.backgroundColor = UIColor.black.withAlphaComponent(0.6)
-        toastLabel.textColor = UIColor.white
-        toastLabel.textAlignment = .center;
-        toastLabel.font = UIFont(name: "Montserrat-Light", size: 12.0)
-        toastLabel.text = message
-        toastLabel.alpha = 1.0
-        toastLabel.layer.cornerRadius = 10;
-        toastLabel.clipsToBounds  =  true
-        self.view.addSubview(toastLabel)
-        UIView.animate(withDuration: 4.0, delay: 0.1, options: .curveEaseOut, animations: {
-            toastLabel.alpha = 0.0
-        }, completion: {(isCompleted) in
-            toastLabel.removeFromSuperview()
-        })
     }
 }
