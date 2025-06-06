@@ -8,6 +8,14 @@
 import Foundation
 
 enum APIConstants {
-    static let baseURL = "https://findamechanic.com.au"
-    static let authToken = "VGLkM6Y+WJ2Wm7VUBsjS1A=="
-} 
+    static let config: [String: Any] = {
+        guard let file = Bundle.main.path(forResource: Bundle.main.object(forInfoDictionaryKey: "APP_CONFIG") as? String, ofType: "plist"),
+              let dict = NSDictionary(contentsOfFile: file) as? [String: Any] else {
+            fatalError("Missing config plist")
+        }
+        return dict
+    }()
+
+    static let baseURL = config["BASE_URL"] as? String ?? ""
+    static let authToken = config["AUTH_TOKEN"] as? String ?? ""
+}
