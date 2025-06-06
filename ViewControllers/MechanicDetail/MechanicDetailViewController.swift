@@ -89,6 +89,9 @@ class MechanicDetailViewController: UIViewController {
             contentView.addSubview($0)
         }
         
+        // Add tag to phone label for layout reference
+        phoneLabel.tag = 999
+        
         layoutManager.setupContentConstraints(
             in: contentView,
             headerImageView: headerImageView,
@@ -207,6 +210,18 @@ class MechanicDetailViewController: UIViewController {
             mapView.isHidden = false
             viewBuilder.setMapLocation(mapView: mapView, locations: mechanic.locations)
         }
+        
+        // Update layout constraints based on visibility
+        layoutManager.updateSectionConstraints(
+            servicesHeaderLabel: servicesHeaderLabel,
+            servicesStackView: servicesStackView,
+            areasHeaderLabel: areasHeaderLabel,
+            areasStackView: areasStackView,
+            hoursHeaderLabel: hoursHeaderLabel,
+            hoursTableView: hoursTableView,
+            locationHeaderLabel: locationHeaderLabel,
+            mapView: mapView
+        )
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(phoneLabelTapped))
         phoneLabel.isUserInteractionEnabled = true

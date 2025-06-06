@@ -9,6 +9,8 @@ import UIKit
 
 class MechanicDetailLayout {
     private weak var viewController: MechanicDetailViewController?
+    private var sectionConstraints: [String: [NSLayoutConstraint]] = [:]
+    private var contentHeightConstraint: NSLayoutConstraint?
     
     init(viewController: MechanicDetailViewController) {
         self.viewController = viewController
@@ -17,6 +19,10 @@ class MechanicDetailLayout {
     func setupScrollView(in view: UIView, scrollView: UIScrollView, contentView: UIView) {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
+        
+        // Enable scrolling
+        scrollView.alwaysBounceVertical = true
+        scrollView.showsVerticalScrollIndicator = true
         
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -48,15 +54,16 @@ class MechanicDetailLayout {
         locationHeaderLabel: UILabel,
         mapView: UIView
     ) {
-        let padding: CGFloat = 20 // Increased padding
-        let sectionSpacing: CGFloat = 32 // Increased section spacing
-        let headerHeight: CGFloat = 44 // Slightly increased header height
+        let padding: CGFloat = 20
+        let sectionSpacing: CGFloat = 32
+        let headerHeight: CGFloat = 44
         
-        // Store constraints that need to be updated when sections are hidden
-        var constraints: [NSLayoutConstraint] = []
+        // Deactivate any existing constraints
+        sectionConstraints.values.forEach { NSLayoutConstraint.deactivate($0) }
+        sectionConstraints.removeAll()
         
-        // Header and basic info constraints
-        constraints += [
+        // Basic info section constraints (always visible)
+        let basicInfoConstraints = [
             headerImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             headerImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             headerImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
@@ -77,9 +84,12 @@ class MechanicDetailLayout {
             
             phoneLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 8),
             phoneLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
-            phoneLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
-            
-            // Services section
+            phoneLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding)
+        ]
+        sectionConstraints["basicInfo"] = basicInfoConstraints
+        
+        // Services section constraints
+        let servicesConstraints = [
             servicesHeaderLabel.topAnchor.constraint(equalTo: phoneLabel.bottomAnchor, constant: sectionSpacing),
             servicesHeaderLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
             servicesHeaderLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
@@ -87,9 +97,12 @@ class MechanicDetailLayout {
             
             servicesStackView.topAnchor.constraint(equalTo: servicesHeaderLabel.bottomAnchor, constant: 12),
             servicesStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
-            servicesStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
-            
-            // Areas section
+            servicesStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding)
+        ]
+        sectionConstraints["services"] = servicesConstraints
+        
+        // Areas section constraints
+        let areasConstraints = [
             areasHeaderLabel.topAnchor.constraint(equalTo: servicesStackView.bottomAnchor, constant: sectionSpacing),
             areasHeaderLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
             areasHeaderLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
@@ -97,9 +110,12 @@ class MechanicDetailLayout {
             
             areasStackView.topAnchor.constraint(equalTo: areasHeaderLabel.bottomAnchor, constant: 12),
             areasStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
-            areasStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
-            
-            // Hours section
+            areasStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding)
+        ]
+        sectionConstraints["areas"] = areasConstraints
+        
+        // Hours section constraints
+        let hoursConstraints = [
             hoursHeaderLabel.topAnchor.constraint(equalTo: areasStackView.bottomAnchor, constant: sectionSpacing),
             hoursHeaderLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
             hoursHeaderLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
@@ -108,9 +124,12 @@ class MechanicDetailLayout {
             hoursTableView.topAnchor.constraint(equalTo: hoursHeaderLabel.bottomAnchor, constant: 12),
             hoursTableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
             hoursTableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
-            hoursTableView.heightAnchor.constraint(equalToConstant: 44 * 7 + 1),
-            
-            // Location section
+            hoursTableView.heightAnchor.constraint(equalToConstant: 44 * 7 + 1)
+        ]
+        sectionConstraints["hours"] = hoursConstraints
+        
+        // Location section constraints
+        let locationConstraints = [
             locationHeaderLabel.topAnchor.constraint(equalTo: hoursTableView.bottomAnchor, constant: sectionSpacing),
             locationHeaderLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
             locationHeaderLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
@@ -119,11 +138,88 @@ class MechanicDetailLayout {
             mapView.topAnchor.constraint(equalTo: locationHeaderLabel.bottomAnchor, constant: 12),
             mapView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
             mapView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
-            mapView.heightAnchor.constraint(equalToConstant: 200),
-            mapView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -padding)
+            mapView.heightAnchor.constraint(equalToConstant: 200)
         ]
+        sectionConstraints["location"] = locationConstraints
         
-        NSLayoutConstraint.activate(constraints)
+        // Bottom constraint for the content view
+        let bottomConstraint = mapView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -padding)
+        bottomConstraint.priority = .defaultHigh // Lower priority to avoid conflicts
+        bottomConstraint.isActive = true
+        
+        // Activate all constraints initially
+        NSLayoutConstraint.activate(basicInfoConstraints)
+        updateSectionConstraints(
+            servicesHeaderLabel: servicesHeaderLabel,
+            servicesStackView: servicesStackView,
+            areasHeaderLabel: areasHeaderLabel,
+            areasStackView: areasStackView,
+            hoursHeaderLabel: hoursHeaderLabel,
+            hoursTableView: hoursTableView,
+            locationHeaderLabel: locationHeaderLabel,
+            mapView: mapView
+        )
+    }
+    
+    func updateSectionConstraints(
+        servicesHeaderLabel: UILabel,
+        servicesStackView: UIStackView,
+        areasHeaderLabel: UILabel,
+        areasStackView: UIStackView,
+        hoursHeaderLabel: UILabel,
+        hoursTableView: UITableView,
+        locationHeaderLabel: UILabel,
+        mapView: UIView
+    ) {
+        // Deactivate all section constraints first
+        ["services", "areas", "hours", "location"].forEach { section in
+            if let constraints = sectionConstraints[section] {
+                NSLayoutConstraint.deactivate(constraints)
+            }
+        }
+        
+        // Create an array to store the visible sections in order
+        var lastVisibleView: UIView = servicesHeaderLabel.superview?.viewWithTag(999) ?? servicesHeaderLabel // Using phoneLabel as fallback
+        
+        // Check and activate services section if visible
+        if !servicesHeaderLabel.isHidden && !servicesStackView.isHidden {
+            if let constraints = sectionConstraints["services"] {
+                NSLayoutConstraint.activate(constraints)
+                lastVisibleView = servicesStackView
+            }
+        }
+        
+        // Check and activate areas section if visible
+        if !areasHeaderLabel.isHidden && !areasStackView.isHidden {
+            if let constraints = sectionConstraints["areas"] {
+                var updatedConstraints = constraints
+                updatedConstraints[0] = areasHeaderLabel.topAnchor.constraint(equalTo: lastVisibleView.bottomAnchor, constant: 32)
+                NSLayoutConstraint.activate(updatedConstraints)
+                lastVisibleView = areasStackView
+            }
+        }
+        
+        // Check and activate hours section if visible
+        if !hoursHeaderLabel.isHidden && !hoursTableView.isHidden {
+            if let constraints = sectionConstraints["hours"] {
+                var updatedConstraints = constraints
+                updatedConstraints[0] = hoursHeaderLabel.topAnchor.constraint(equalTo: lastVisibleView.bottomAnchor, constant: 32)
+                NSLayoutConstraint.activate(updatedConstraints)
+                lastVisibleView = hoursTableView
+            }
+        }
+        
+        // Check and activate location section if visible
+        if !locationHeaderLabel.isHidden && !mapView.isHidden {
+            if let constraints = sectionConstraints["location"] {
+                var updatedConstraints = constraints
+                updatedConstraints[0] = locationHeaderLabel.topAnchor.constraint(equalTo: lastVisibleView.bottomAnchor, constant: 32)
+                NSLayoutConstraint.activate(updatedConstraints)
+            }
+        }
+        
+        // Force layout update
+        lastVisibleView.superview?.layoutIfNeeded()
     }
     
     // Helper function for determining max Y anchor
