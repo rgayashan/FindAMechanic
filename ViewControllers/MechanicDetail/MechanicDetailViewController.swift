@@ -207,6 +207,10 @@ class MechanicDetailViewController: UIViewController {
             mapView.isHidden = false
             viewBuilder.setMapLocation(mapView: mapView, locations: mechanic.locations)
         }
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(phoneLabelTapped))
+        phoneLabel.isUserInteractionEnabled = true
+        phoneLabel.addGestureRecognizer(tapGesture)
     }
     
     private func loadImage(from urlString: String?, into imageView: UIImageView) {
@@ -286,6 +290,13 @@ class MechanicDetailViewController: UIViewController {
     @objc private func inquiryButtonTapped() {
         guard let mechanic = mechanic else { return }
         InquiryPopupHelper.showInquiryPopup(from: self, mechanicName: mechanic.name, delegate: self)
+    }
+    
+    @objc private func phoneLabelTapped() {
+        guard let phone = mechanic?.phone, let url = URL(string: "tel://\(phone)") else { return }
+        if UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
     }
     
     // MARK: - Public Methods
