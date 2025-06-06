@@ -26,7 +26,7 @@ struct MechanicCellComponents {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
         imageView.backgroundColor = .systemGray6
-        imageView.layer.cornerRadius = 40
+        imageView.layer.cornerRadius = 30
         imageView.clipsToBounds = true
         return imageView
     }
@@ -64,7 +64,7 @@ struct MechanicCellComponents {
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         button.backgroundColor = UIColor(named: "theme-bg") ?? .systemBlue
-        button.layer.cornerRadius = 22
+        button.layer.cornerRadius = 18
         
         // Add shadow to button
         button.layer.shadowColor = UIColor.black.cgColor

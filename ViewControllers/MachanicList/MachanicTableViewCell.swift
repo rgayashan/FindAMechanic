@@ -49,43 +49,43 @@ class MechanicTableViewCell: UITableViewCell {
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             // Container constraints
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
+            containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
             
             // Logo constraints
-            logoImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
-            logoImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
-            logoImageView.widthAnchor.constraint(equalToConstant: 80),
-            logoImageView.heightAnchor.constraint(equalToConstant: 80),
+            logoImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 12),
+            logoImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12),
+            logoImageView.widthAnchor.constraint(equalToConstant: 60),
+            logoImageView.heightAnchor.constraint(equalToConstant: 60),
             
             // Name label constraints
-            nameLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
-            nameLabel.leadingAnchor.constraint(equalTo: logoImageView.trailingAnchor, constant: 16),
-            nameLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
+            nameLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 12),
+            nameLabel.leadingAnchor.constraint(equalTo: logoImageView.trailingAnchor, constant: 12),
+            nameLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -12),
             
             // Address Line 1 constraints
-            addressLine1Label.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8),
+            addressLine1Label.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
             addressLine1Label.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
             addressLine1Label.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
             
             // Address Line 2 constraints
-            addressLine2Label.topAnchor.constraint(equalTo: addressLine1Label.bottomAnchor, constant: 4),
+            addressLine2Label.topAnchor.constraint(equalTo: addressLine1Label.bottomAnchor, constant: 2),
             addressLine2Label.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
             addressLine2Label.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
             
             // Phone constraints
-            phoneLabel.topAnchor.constraint(equalTo: addressLine2Label.bottomAnchor, constant: 8),
+            phoneLabel.topAnchor.constraint(equalTo: addressLine2Label.bottomAnchor, constant: 4),
             phoneLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
             phoneLabel.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
             
             // Book button constraints
-            bookButton.topAnchor.constraint(equalTo: phoneLabel.bottomAnchor, constant: 16),
-            bookButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
-            bookButton.heightAnchor.constraint(equalToConstant: 44),
-            bookButton.widthAnchor.constraint(equalToConstant: 160),
-            bookButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -16)
+            bookButton.topAnchor.constraint(equalTo: phoneLabel.bottomAnchor, constant: 8),
+            bookButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -12),
+            bookButton.heightAnchor.constraint(equalToConstant: 36),
+            bookButton.widthAnchor.constraint(equalToConstant: 140),
+            bookButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -12)
         ])
     }
     

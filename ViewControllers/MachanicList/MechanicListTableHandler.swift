@@ -26,7 +26,7 @@ class MechanicListTableHandler: NSObject {
         tableView.register(MechanicTableViewCell.self, forCellReuseIdentifier: "MechanicCell")
         tableView.separatorStyle = .none
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 160
+        tableView.estimatedRowHeight = 120
     }
     
     private func setupRefreshControl() {
