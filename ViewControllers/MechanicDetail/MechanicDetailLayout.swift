@@ -215,7 +215,23 @@ class MechanicDetailLayout {
                 var updatedConstraints = constraints
                 updatedConstraints[0] = locationHeaderLabel.topAnchor.constraint(equalTo: lastVisibleView.bottomAnchor, constant: 32)
                 NSLayoutConstraint.activate(updatedConstraints)
+                lastVisibleView = mapView
             }
+        }
+        
+        // Update the content view's bottom constraint
+        if let contentView = lastVisibleView.superview {
+            // Remove any existing bottom constraint
+            contentView.constraints.forEach { constraint in
+                if constraint.firstAttribute == .bottom && constraint.secondAttribute == .bottom {
+                    constraint.isActive = false
+                }
+            }
+            
+            // Add new bottom constraint
+            let bottomConstraint = lastVisibleView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+            bottomConstraint.priority = .defaultHigh
+            bottomConstraint.isActive = true
         }
         
         // Force layout update
