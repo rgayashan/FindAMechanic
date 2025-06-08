@@ -144,7 +144,7 @@ class MechanicDetailViewController: UIViewController {
         print("Fetching details for mechanic ID: \(mechanicID)")
         LoadingIndicator.show(in: view)
         
-        dataService.getMechanicDetails(mechanicID: mechanicID) { [weak self] result in
+        dataService.getMechanicDetails(tenantId: mechanicID) { [weak self] result in
             DispatchQueue.main.async {
                 LoadingIndicator.hide(animated: true) {
                     switch result {

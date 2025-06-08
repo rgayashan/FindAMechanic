@@ -163,15 +163,6 @@ class InquiryPopupViewController: UIViewController {
     }
     
     private func submitInquiry(inquiry: InquiryForm) {
-        let baseURL = APIConstants.baseURL
-        guard let url = URL(string: "\(baseURL)/api/bookings") else {
-            showToast(message: "Invalid URL configuration")
-            return 
-        }
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
         let dateFormatter = ISO8601DateFormatter()
         let dateString = dateFormatter.string(from: inquiry.date!)
         
@@ -193,51 +184,41 @@ class InquiryPopupViewController: UIViewController {
             "Channel": "02"
         ]
         
-        do {
-            request.httpBody = try JSONSerialization.data(withJSONObject: payload, options: .fragmentsAllowed)
-        } catch {
-            DispatchQueue.main.async {
-                self.showToast(message: "Failed to process your request. Please try again.")
-            }
-            return
-        }
-        
         // Show loading toast
         DispatchQueue.main.async {
             self.showToast(message: "Submitting inquiry...")
         }
         
-        let task = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
-            guard let self = self else { return }
-            
-            DispatchQueue.main.async {
-                if let error = error {
-                    self.showToast(message: "Network error: Please check your connection")
-                    return
-                }
+        Task {
+            do {
+                let _: EmptyResponse = try await APIService.shared.post(
+                    endpoint: APIEndpoints.Bookings.create,
+                    body: payload
+                )
                 
-                guard let httpResponse = response as? HTTPURLResponse else {
-                    self.showToast(message: "Invalid server response")
-                    return
-                }
-                
-                switch httpResponse.statusCode {
-                case 200...299:
+                DispatchQueue.main.async {
                     self.delegate?.inquirySubmitted(inquiry: inquiry)
-                    // Show success toast and dismiss after it completes
                     self.showToast(message: "Success! Your inquiry has been submitted", dismissPopupAfter: true)
-                case 400:
-                    self.showToast(message: "Invalid request. Please check your details")
-                case 401:
-                    self.showToast(message: "Authentication failed")
-                case 500:
-                    self.showToast(message: "Server error. Please try again later")
-                default:
-                    self.showToast(message: "Error: Unable to submit inquiry (Status: \(httpResponse.statusCode))")
+                }
+            } catch {
+                let errorMessage: String
+                if let apiError = error as? APIError {
+                    switch apiError {
+                    case .unauthorized:
+                        errorMessage = "Authentication failed"
+                    case .serverError(let code):
+                        errorMessage = "Server error (Status: \(code))"
+                    default:
+                        errorMessage = apiError.localizedDescription
+                    }
+                } else {
+                    errorMessage = "Failed to submit inquiry: \(error.localizedDescription)"
+                }
+                
+                DispatchQueue.main.async {
+                    self.showToast(message: errorMessage)
                 }
             }
         }
-        
-        task.resume()
     }
 }

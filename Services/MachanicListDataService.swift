@@ -58,48 +58,24 @@ struct CountryList: Codable {
 
 class MachanicListDataService {
     static let shared = MachanicListDataService()
-    private let baseURL = APIConstants.baseURL
-    private let authToken = APIConstants.authToken
+    private let apiService = APIService.shared
     
     private init() {}
     
     func getMechanics(page: Int, itemsPerPage: Int, search: String = "", completion: @escaping (Result<[Mechanic], DataError>) -> Void) {
-        let endpoint = "api/Tenants"
         let queryItems = [
-            URLQueryItem(name: "Search", value: search),
-            URLQueryItem(name: "pageSize", value: "\(itemsPerPage)"),
-            URLQueryItem(name: "PageNumber", value: "\(page)")
+            URLQueryItem(name: APIEndpoints.QueryParameters.search, value: search),
+            URLQueryItem(name: APIEndpoints.QueryParameters.pageSize, value: "\(itemsPerPage)"),
+            URLQueryItem(name: APIEndpoints.QueryParameters.pageNumber, value: "\(page)")
         ]
         
-        guard var urlComponents = URLComponents(string: "\(baseURL)/\(endpoint)") else {
-            completion(.failure(.networkError))
-            return
-        }
-        
-        urlComponents.queryItems = queryItems
-        
-        guard let url = urlComponents.url else {
-            completion(.failure(.networkError))
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.addValue("\(authToken)", forHTTPHeaderField: "Authorization")
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                completion(.failure(.networkError))
-                return
-            }
-            
-            guard let data = data else {
-                completion(.failure(.noData))
-                return
-            }
-            
+        Task {
             do {
-                let apiResponse = try JSONDecoder().decode(APIResponse.self, from: data)
+                let apiResponse: APIResponse = try await apiService.get(
+                    endpoint: APIEndpoints.Tenants.mechanicsList,
+                    queryItems: queryItems
+                )
+                
                 let mechanics = apiResponse.result.result.map { tenant in
                     let addressLine1 = [tenant.billStreetNumber, tenant.billStreetName]
                         .compactMap { $0?.isEmpty ?? true ? nil : $0 }
@@ -123,25 +99,35 @@ class MachanicListDataService {
                         rating: 0.0 // API doesn't provide rating
                     )
                 }
-                completion(.success(mechanics))
-            } catch {
-                print("Decoding error: \(error)")
-                if let decodingError = error as? DecodingError {
-                    switch decodingError {
-                    case .keyNotFound(let key, let context):
-                        print("Key '\(key)' not found: \(context.debugDescription)")
-                    case .typeMismatch(let type, let context):
-                        print("Type '\(type)' mismatch: \(context.debugDescription)")
-                    case .valueNotFound(let type, let context):
-                        print("Value of type '\(type)' not found: \(context.debugDescription)")
-                    case .dataCorrupted(let context):
-                        print("Data corrupted: \(context.debugDescription)")
-                    @unknown default:
-                        print("Unknown decoding error: \(decodingError)")
-                    }
+                
+                DispatchQueue.main.async {
+                    completion(.success(mechanics))
                 }
-                completion(.failure(.decodingError))
+            } catch {
+                let dataError: DataError
+                if let apiError = error as? APIError {
+                    switch apiError {
+                    case .networkError:
+                        dataError = .networkError
+                    case .decodingError:
+                        dataError = .decodingError
+                    case .notFound:
+                        dataError = .apiError("Resource not found")
+                    case .unauthorized:
+                        dataError = .apiError("Unauthorized access")
+                    case .serverError(let code):
+                        dataError = .apiError("Server error: \(code)")
+                    default:
+                        dataError = .apiError(apiError.localizedDescription)
+                    }
+                } else {
+                    dataError = .apiError(error.localizedDescription)
+                }
+                
+                DispatchQueue.main.async {
+                    completion(.failure(dataError))
+                }
             }
-        }.resume()
+        }
     }
 }

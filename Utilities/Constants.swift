@@ -51,19 +51,6 @@ struct Constants {
         }
     }
     
-    // MARK: - Network Constants
-    
-    struct Network {
-        static let baseURL = "https://findamechanic.example.com/api"
-        static let timeoutInterval: TimeInterval = 30.0
-        
-        struct Endpoints {
-            static let mechanics = "/mechanics"
-            static let mechanic = "/mechanics/"
-            static let inquiry = "/inquiry"
-        }
-    }
-    
     // MARK: - Notification Names
     
     struct NotificationNames {
