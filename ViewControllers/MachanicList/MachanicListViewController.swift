@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MechanicListViewController: UIViewController {
+class MechanicListViewController: BaseViewController {
     
     // MARK: - Properties
     private let tableView = UITableView()
@@ -43,7 +43,7 @@ class MechanicListViewController: UIViewController {
     }
     
     // MARK: - Setup Methods
-    private func setupUI() {
+    internal override func setupUI() {
         view.backgroundColor = .white
         setupNavigationBar()
         setupTableView()
@@ -183,7 +183,7 @@ class MechanicListViewController: UIViewController {
             }
             
         case .failure:
-            showErrorAlert()
+            self.showAlert(title: "Error", message: "Failed to load mechanics")
         }
     }
     
@@ -211,11 +211,6 @@ class MechanicListViewController: UIViewController {
         tableHandler.endRefreshing()
     }
     
-    private func showErrorAlert() {
-        let alert = UIAlertController(title: "Error", message: "Failed to load mechanics", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
-    }
     
     private func animateCellsAfterReload() {
         let visibleCells = tableView.visibleCells

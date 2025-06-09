@@ -70,6 +70,73 @@ class BaseViewController: UIViewController, ViewControllerSetupProtocol {
         present(alertController, animated: true)
     }
     
+    
+    func confirmationAlert(title: String, message: String, cancelAction: @escaping () -> Void, confirmAction: @escaping () -> Void, cancelText: String, confirmText: String) -> UIAlertController {
+        let alert = UIAlertController(
+            title: title,
+            message: message,
+            preferredStyle: .alert
+        )
+        
+        alert.addAction(UIAlertAction(title: cancelText, style: .cancel) { _ in
+            cancelAction()
+        })
+        
+        alert.addAction(UIAlertAction(title: confirmText, style: .default) { _ in
+            confirmAction()
+        })
+        
+        return alert
+    }
+    
+    func showToast(message: String, dismissPopupAfter: Bool = false) {
+        // Calculate the width needed for the message
+        let font = UIFont(name: "Montserrat-Light", size: 10.0) ?? UIFont.systemFont(ofSize: 10.0)
+        let messageSize = (message as NSString).size(withAttributes: [.font: font])
+        
+        // Add padding and ensure minimum and maximum width
+        let padding: CGFloat = 20
+        let minWidth: CGFloat = 150
+        let maxWidth = self.view.frame.width - 40 // 20 points padding on each side
+        let toastWidth = min(max(messageSize.width + padding * 2, minWidth), maxWidth)
+        
+        // Calculate height based on the text wrapping
+        let toastLabel = UILabel()
+        toastLabel.font = font
+        toastLabel.numberOfLines = 0 // Allow multiple lines
+        toastLabel.text = message
+        
+        let height: CGFloat = 40 // Minimum height
+        
+        // Position the toast at the bottom of the screen
+        let xPos = (self.view.frame.width - toastWidth) / 2
+        let yPos = self.view.frame.height - height - 100 // 100 points from bottom
+        
+        toastLabel.frame = CGRect(x: xPos, y: yPos, width: toastWidth, height: height)
+        toastLabel.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+        toastLabel.textColor = UIColor.white
+        toastLabel.textAlignment = .center
+        toastLabel.alpha = 1.0
+        toastLabel.layer.cornerRadius = 10
+        toastLabel.clipsToBounds = true
+        
+        // Add padding to the text
+        toastLabel.layoutMargins = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
+        
+        self.view.addSubview(toastLabel)
+        
+        UIView.animate(withDuration: 4.0, delay: 0.1, options: .curveEaseOut, animations: {
+            toastLabel.alpha = 0.0
+        }, completion: { [weak self] _ in
+            toastLabel.removeFromSuperview()
+            if dismissPopupAfter {
+                DispatchQueue.main.async {
+                    self?.dismiss(animated: true)
+                }
+            }
+        })
+    }
+    
     /// Shows a loading indicator
     /// - Parameter message: Optional message to show with the loading indicator
     func showLoading(message: String? = nil) {
@@ -127,4 +194,4 @@ class BaseViewController: UIViewController, ViewControllerSetupProtocol {
             loadingView.removeFromSuperview()
         }
     }
-} 
+}

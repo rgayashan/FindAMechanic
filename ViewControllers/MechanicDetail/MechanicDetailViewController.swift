@@ -8,7 +8,7 @@
 import UIKit
 import MapKit
 
-class MechanicDetailViewController: UIViewController {
+class MechanicDetailViewController: BaseViewController {
     
     // MARK: - Properties
     var mechanic: MechanicDetails?
@@ -137,7 +137,19 @@ class MechanicDetailViewController: UIViewController {
     private func fetchMechanicDetails() {
         guard let mechanicID = mechanicID else {
             print("Error: mechanicID is nil")
-            showError(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Mechanic ID not found"]))
+            let alert = self.confirmationAlert(
+                title: "Error",
+                message: NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Mechanic ID not found"]).localizedDescription,
+                cancelAction: { [weak self] in
+                    self?.navigationController?.popViewController(animated: true)
+                },
+                confirmAction: { [weak self] in
+                    self?.fetchMechanicDetails()
+                },
+                cancelText: "Cancel",
+                confirmText: "Retry"
+            )
+            present(alert, animated: true)
             return
         }
         
@@ -153,7 +165,21 @@ class MechanicDetailViewController: UIViewController {
                         self?.updateUI()
                         self?.showContent()
                     case .failure(let error):
-                        self?.showError(error)
+                        let alert = self?.confirmationAlert(
+                            title: "Error",
+                            message: error.localizedDescription,
+                            cancelAction: { [weak self] in
+                                self?.navigationController?.popViewController(animated: true)
+                            },
+                            confirmAction: { [weak self] in
+                                self?.fetchMechanicDetails()
+                            },
+                            cancelText: "Cancel",
+                            confirmText: "Retry"
+                        )
+                        if let alert = alert {
+                            self?.present(alert, animated: true)
+                        }
                     }
                 }
             }
@@ -288,15 +314,6 @@ class MechanicDetailViewController: UIViewController {
         }
     }
     
-    private func showError(_ error: Error) {
-        let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Retry", style: .default) { [weak self] _ in
-            self?.fetchMechanicDetails()
-        })
-        present(alert, animated: true)
-    }
-    
     // MARK: - Actions
     @objc private func backButtonTapped() {
         navigationController?.popViewController(animated: true)
@@ -339,11 +356,5 @@ extension MechanicDetailViewController: InquiryPopupDelegate {
                 }
             }
         }
-    }
-    
-    private func showAlert(title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
     }
 }

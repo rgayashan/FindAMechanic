@@ -115,21 +115,5 @@ struct InquiryUIFactory {
         return toolbar
     }
     
-    static func createConfirmationAlert(title: String, message: String, cancelAction: @escaping () -> Void, confirmAction: @escaping () -> Void) -> UIAlertController {
-        let alert = UIAlertController(
-            title: title,
-            message: message,
-            preferredStyle: .alert
-        )
-        
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { _ in
-            cancelAction()
-        })
-        
-        alert.addAction(UIAlertAction(title: "Submit", style: .default) { _ in
-            confirmAction()
-        })
-        
-        return alert
-    }
+    
 } 
