@@ -214,7 +214,7 @@ class MechanicListViewController: BaseViewController {
     
     private func animateCellsAfterReload() {
         let visibleCells = tableView.visibleCells
-        let totalCells = visibleCells.count
+        _ = visibleCells.count
         
         for (index, cell) in visibleCells.enumerated() {
             guard let mechanicCell = cell as? MechanicTableViewCell else { continue }

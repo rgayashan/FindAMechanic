@@ -60,7 +60,7 @@ class MechanicListSearchHandler: NSObject {
                     switch result {
                     case .success(let mechanics):
                         self.viewController?.updateSearchResults(mechanics)
-                    case .failure(let error):
+                    case .failure(_):
                         // Handle error if needed
                         self.viewController?.updateSearchResults([])
                     }

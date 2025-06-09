@@ -59,7 +59,7 @@ extension InquiryDelegateHandler: UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         // Clear validation error when starting to edit
-        if let validationType = fieldValidationTypes[textField] {
+        if fieldValidationTypes[textField] != nil {
             validationDisplay?.showValidationResult(for: textField, result: (isValid: true, errorMessage: nil))
         }
     }

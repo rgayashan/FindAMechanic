@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		077141FE2DBCFD1A0013FC1A /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 077141FD2DBCFD120013FC1A /* README.md */; };
 		460F8104EB46E980AB1A246A /* Pods_FindAMechanic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19479C18415408DF59E183FD /* Pods_FindAMechanic.framework */; };
-		4FD76874D95564FB6FFEFA91 /* Pods_FindAMechanicTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AFB5FC122E98921244D45A1 /* Pods_FindAMechanicTests.framework */; };
-		A8045BDC6305A24FD54E7320 /* Pods_FindAMechanic_FindAMechanicUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7A5E4A7979147D7BCC6EE32 /* Pods_FindAMechanic_FindAMechanicUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,14 +33,9 @@
 		077141A22DBBBF950013FC1A /* FindAMechanicTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FindAMechanicTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		077141AC2DBBBF950013FC1A /* FindAMechanicUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FindAMechanicUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		077141FD2DBCFD120013FC1A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		09321C02AFB80CE15EF201B3 /* Pods-FindAMechanicTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FindAMechanicTests.debug.xcconfig"; path = "Target Support Files/Pods-FindAMechanicTests/Pods-FindAMechanicTests.debug.xcconfig"; sourceTree = "<group>"; };
-		1344389DF70416F095EAC787 /* Pods-FindAMechanic-FindAMechanicUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FindAMechanic-FindAMechanicUITests.debug.xcconfig"; path = "Target Support Files/Pods-FindAMechanic-FindAMechanicUITests/Pods-FindAMechanic-FindAMechanicUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		19479C18415408DF59E183FD /* Pods_FindAMechanic.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FindAMechanic.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		1B19BFC18BA582204C9457A1 /* Pods-FindAMechanicTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FindAMechanicTests.release.xcconfig"; path = "Target Support Files/Pods-FindAMechanicTests/Pods-FindAMechanicTests.release.xcconfig"; sourceTree = "<group>"; };
-		7AFB5FC122E98921244D45A1 /* Pods_FindAMechanicTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FindAMechanicTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6F4A5A8A810A80E47FAEF5F /* Pods-FindAMechanic.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FindAMechanic.release.xcconfig"; path = "Target Support Files/Pods-FindAMechanic/Pods-FindAMechanic.release.xcconfig"; sourceTree = "<group>"; };
-		D7A5E4A7979147D7BCC6EE32 /* Pods_FindAMechanic_FindAMechanicUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FindAMechanic_FindAMechanicUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		D885FFE6408833DF8225D85C /* Pods-FindAMechanic-FindAMechanicUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FindAMechanic-FindAMechanicUITests.release.xcconfig"; path = "Target Support Files/Pods-FindAMechanic-FindAMechanicUITests/Pods-FindAMechanic-FindAMechanicUITests.release.xcconfig"; sourceTree = "<group>"; };
+		E46A684C42EB422C1ED17CE2 /* Pods-FindAMechanic.dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FindAMechanic.dev.xcconfig"; path = "Target Support Files/Pods-FindAMechanic/Pods-FindAMechanic.dev.xcconfig"; sourceTree = "<group>"; };
 		F31159BE0E3437C6EB7F85F6 /* Pods-FindAMechanic.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FindAMechanic.debug.xcconfig"; path = "Target Support Files/Pods-FindAMechanic/Pods-FindAMechanic.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -110,7 +103,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4FD76874D95564FB6FFEFA91 /* Pods_FindAMechanicTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,7 +110,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A8045BDC6305A24FD54E7320 /* Pods_FindAMechanic_FindAMechanicUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -157,10 +148,7 @@
 			children = (
 				F31159BE0E3437C6EB7F85F6 /* Pods-FindAMechanic.debug.xcconfig */,
 				C6F4A5A8A810A80E47FAEF5F /* Pods-FindAMechanic.release.xcconfig */,
-				1344389DF70416F095EAC787 /* Pods-FindAMechanic-FindAMechanicUITests.debug.xcconfig */,
-				D885FFE6408833DF8225D85C /* Pods-FindAMechanic-FindAMechanicUITests.release.xcconfig */,
-				09321C02AFB80CE15EF201B3 /* Pods-FindAMechanicTests.debug.xcconfig */,
-				1B19BFC18BA582204C9457A1 /* Pods-FindAMechanicTests.release.xcconfig */,
+				E46A684C42EB422C1ED17CE2 /* Pods-FindAMechanic.dev.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -169,8 +157,6 @@
 			isa = PBXGroup;
 			children = (
 				19479C18415408DF59E183FD /* Pods_FindAMechanic.framework */,
-				D7A5E4A7979147D7BCC6EE32 /* Pods_FindAMechanic_FindAMechanicUITests.framework */,
-				7AFB5FC122E98921244D45A1 /* Pods_FindAMechanicTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -210,7 +196,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 077141BA2DBBBF950013FC1A /* Build configuration list for PBXNativeTarget "FindAMechanicTests" */;
 			buildPhases = (
-				04C58C5797500C25D60C16FE /* [CP] Check Pods Manifest.lock */,
 				0771419E2DBBBF950013FC1A /* Sources */,
 				0771419F2DBBBF950013FC1A /* Frameworks */,
 				077141A02DBBBF950013FC1A /* Resources */,
@@ -229,11 +214,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 077141BD2DBBBF950013FC1A /* Build configuration list for PBXNativeTarget "FindAMechanicUITests" */;
 			buildPhases = (
-				E0BB3524A624CFF90BBC48EB /* [CP] Check Pods Manifest.lock */,
 				077141A82DBBBF950013FC1A /* Sources */,
 				077141A92DBBBF950013FC1A /* Frameworks */,
 				077141AA2DBBBF950013FC1A /* Resources */,
-				E8903CDFF914462852763AA6 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -253,7 +236,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1620;
-				LastUpgradeCheck = 1620;
+				LastUpgradeCheck = 1630;
 				TargetAttributes = {
 					0771418B2DBBBF920013FC1A = {
 						CreatedOnToolsVersion = 16.2;
@@ -315,28 +298,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		04C58C5797500C25D60C16FE /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-FindAMechanicTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 		26E2FDA9360113E32A64FD21 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 12;
@@ -378,49 +339,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E0BB3524A624CFF90BBC48EB /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-FindAMechanic-FindAMechanicUITests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E8903CDFF914462852763AA6 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FindAMechanic-FindAMechanicUITests/Pods-FindAMechanic-FindAMechanicUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FindAMechanic-FindAMechanicUITests/Pods-FindAMechanic-FindAMechanicUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FindAMechanic-FindAMechanicUITests/Pods-FindAMechanic-FindAMechanicUITests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -498,6 +416,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = TQ7HJYRKZ7;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -515,7 +434,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = "Config-Dev";
 				MTL_FAST_MATH = YES;
@@ -528,14 +447,13 @@
 		};
 		074BA5F82DF31120002A4573 /* Dev */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F31159BE0E3437C6EB7F85F6 /* Pods-FindAMechanic.debug.xcconfig */;
+			baseConfigurationReference = E46A684C42EB422C1ED17CE2 /* Pods-FindAMechanic.dev.xcconfig */;
 			buildSettings = {
 				APP_CONFIG = "Config-Dev";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = TQ7HJYRKZ7;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FindAMechanic/Info.plist;
@@ -544,7 +462,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -562,12 +480,10 @@
 		};
 		074BA5F92DF31120002A4573 /* Dev */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 09321C02AFB80CE15EF201B3 /* Pods-FindAMechanicTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = TQ7HJYRKZ7;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				MARKETING_VERSION = 1.0;
@@ -582,11 +498,9 @@
 		};
 		074BA5FA2DF31120002A4573 /* Dev */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1344389DF70416F095EAC787 /* Pods-FindAMechanic-FindAMechanicUITests.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = TQ7HJYRKZ7;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vemas.Find-a-MechanicUITests";
@@ -607,7 +521,6 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = TQ7HJYRKZ7;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FindAMechanic/Info.plist;
@@ -616,7 +529,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -642,7 +555,6 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = TQ7HJYRKZ7;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FindAMechanic/Info.plist;
@@ -651,7 +563,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -702,6 +614,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = TQ7HJYRKZ7;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -719,7 +632,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -765,6 +678,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = TQ7HJYRKZ7;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -776,7 +690,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = "Config-Prod";
 				MTL_FAST_MATH = YES;
@@ -788,12 +702,10 @@
 		};
 		077141BB2DBBBF950013FC1A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 09321C02AFB80CE15EF201B3 /* Pods-FindAMechanicTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = TQ7HJYRKZ7;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				MARKETING_VERSION = 1.0;
@@ -808,12 +720,10 @@
 		};
 		077141BC2DBBBF950013FC1A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1B19BFC18BA582204C9457A1 /* Pods-FindAMechanicTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = TQ7HJYRKZ7;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				MARKETING_VERSION = 1.0;
@@ -828,11 +738,9 @@
 		};
 		077141BE2DBBBF950013FC1A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1344389DF70416F095EAC787 /* Pods-FindAMechanic-FindAMechanicUITests.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = TQ7HJYRKZ7;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vemas.Find-a-MechanicUITests";
@@ -846,11 +754,9 @@
 		};
 		077141BF2DBBBF950013FC1A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D885FFE6408833DF8225D85C /* Pods-FindAMechanic-FindAMechanicUITests.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = TQ7HJYRKZ7;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vemas.Find-a-MechanicUITests";

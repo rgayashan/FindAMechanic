@@ -89,7 +89,7 @@ class APIService {
         
         urlComponents.queryItems = queryItems
         
-        guard let url = urlComponents.url,
+        guard let _ = urlComponents.url,
               let request = createRequest(for: endpoint) else {
             throw APIError.invalidURL
         }
