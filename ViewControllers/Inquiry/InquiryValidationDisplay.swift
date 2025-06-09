@@ -18,6 +18,7 @@ class InquiryValidationDisplay {
     }
     
     // MARK: - Public Methods
+    @discardableResult
     func setupErrorLabel(for textField: UITextField, in containerView: UIView) -> UILabel {
         let errorLabel = createErrorLabel()
         containerView.addSubview(errorLabel)
