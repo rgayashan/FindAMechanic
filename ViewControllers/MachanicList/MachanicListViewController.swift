@@ -156,13 +156,21 @@ class MechanicListViewController: BaseViewController {
         guard !isLoading, hasMoreData else { return }
         
         isLoading = true
-        showLoadingIndicator()
+        if page == 1 {
+            LoadingIndicator.show(in: view)
+        } else {
+            showLoadingIndicator()
+        }
         
         dataService.getMechanics(page: page, itemsPerPage: itemsPerPage) { [weak self] result in
             guard let self = self else { return }
             
             DispatchQueue.main.async {
-                self.hideLoadingIndicator()
+                if page == 1 {
+                    LoadingIndicator.hide(animated: true)
+                } else {
+                    self.hideLoadingIndicator()
+                }
                 self.handleFetchResult(result, forPage: page)
             }
         }
@@ -211,10 +219,18 @@ class MechanicListViewController: BaseViewController {
     
     // MARK: - UI Updates
     func updateSearchResults(_ filtered: [Mechanic]) {
+        if isSearchActive && filtered.isEmpty {
+            LoadingIndicator.show(in: view)
+        }
+        
         filteredMechanics = filtered
         tableHandler.reloadData()
         animateCellsAfterReload()
         showEmptyStateIfNeeded()
+        
+        if isSearchActive {
+            LoadingIndicator.hide(animated: true)
+        }
     }
     
     private func showEmptyStateIfNeeded() {
