@@ -104,26 +104,13 @@ class MachanicListDataService {
                     completion(.success(mechanics))
                 }
             } catch {
+
                 let dataError: DataError
                 if let apiError = error as? APIError {
-                    switch apiError {
-                    case .networkError:
-                        dataError = .networkError
-                    case .decodingError:
-                        dataError = .decodingError
-                    case .notFound:
-                        dataError = .apiError("Resource not found")
-                    case .unauthorized:
-                        dataError = .apiError("Unauthorized access")
-                    case .serverError(let code):
-                        dataError = .apiError("Server error: \(code)")
-                    default:
-                        dataError = .apiError(apiError.localizedDescription)
-                    }
+                    dataError = .apiError(apiError.localizedDescription)
                 } else {
-                    dataError = .apiError(error.localizedDescription)
+                    dataError = .networkError
                 }
-                
                 DispatchQueue.main.async {
                     completion(.failure(dataError))
                 }

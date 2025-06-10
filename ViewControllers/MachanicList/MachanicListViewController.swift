@@ -14,7 +14,7 @@ class MechanicListViewController: BaseViewController {
     var mechanics = [Mechanic]()
     private var filteredMechanics = [Mechanic]()
     private var currentPage = 1
-    private let itemsPerPage = 10
+    private let itemsPerPage = 20
     private var isLoading = false
     private var hasMoreData = true
     private var isSearching = false
@@ -141,7 +141,13 @@ class MechanicListViewController: BaseViewController {
     }
     
     func loadMoreIfNeeded() {
-        guard !isLoading, hasMoreData else { return }
+        guard !isLoading && hasMoreData else { return }
+        
+        // Show loading indicator only if we have more data to load
+        if hasMoreData {
+            showLoadingIndicator()
+        }
+        
         currentPage += 1
         fetchMechanics(page: currentPage)
     }
@@ -167,12 +173,21 @@ class MechanicListViewController: BaseViewController {
         
         switch result {
         case .success(let newMechanics):
-            hasMoreData = newMechanics.count == itemsPerPage
+            // If we get no items or fewer items than requested, we've reached the end
+            hasMoreData = !newMechanics.isEmpty && newMechanics.count >= itemsPerPage
             
             if page == 1 {
                 mechanics = newMechanics
             } else {
-                mechanics.append(contentsOf: newMechanics)
+                // Only append new items if we haven't already loaded them
+                let existingIds = Set(mechanics.map { $0.id })
+                let newItems = newMechanics.filter { !existingIds.contains($0.id) }
+                mechanics.append(contentsOf: newItems)
+                
+                // If no new items were added, we've reached the end
+                if newItems.isEmpty {
+                    hasMoreData = false
+                }
             }
             
             if isSearchActive {
@@ -182,8 +197,15 @@ class MechanicListViewController: BaseViewController {
                 animateCellsAfterReload()
             }
             
-        case .failure:
-            self.showAlert(title: "Error", message: "Failed to load mechanics")
+            // Hide loading indicator if we've reached the end
+            if !hasMoreData {
+                tableView.tableFooterView = nil
+            }
+            
+        case .failure(let error):
+            self.showAlert(title: "Error", message: "Failed to load mechanics: \(error.localizedDescription)")
+            // Hide loading indicator on error
+            tableView.tableFooterView = nil
         }
     }
     

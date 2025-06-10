@@ -126,7 +126,6 @@ class MechanicDetailViewController: BaseViewController {
         hoursTableView.clipsToBounds = true
         hoursTableView.isScrollEnabled = false
         hoursTableView.rowHeight = 44
-        print("Setting up table view - Frame: \(hoursTableView.frame)")
     }
     
     private func setupMapView() {
@@ -136,7 +135,6 @@ class MechanicDetailViewController: BaseViewController {
     // MARK: - Data Loading Methods
     private func fetchMechanicDetails() {
         guard let mechanicID = mechanicID else {
-            print("Error: mechanicID is nil")
             let alert = self.confirmationAlert(
                 title: "Error",
                 message: NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Mechanic ID not found"]).localizedDescription,
@@ -153,7 +151,6 @@ class MechanicDetailViewController: BaseViewController {
             return
         }
         
-        print("Fetching details for mechanic ID: \(mechanicID)")
         LoadingIndicator.show(in: view)
         
         dataService.getMechanicDetails(tenantId: mechanicID) { [weak self] result in

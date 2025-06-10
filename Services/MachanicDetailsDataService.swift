@@ -99,8 +99,6 @@ class MachanicDetailsDataService {
                 } else {
                     errorMessage = error.localizedDescription
                 }
-                
-                print("Get Mechanic Details Error: \(errorMessage)")
                 DispatchQueue.main.async {
                     completion(.failure(DataServiceError.unknown(errorMessage)))
                 }
@@ -207,8 +205,6 @@ class MachanicDetailsDataService {
                 } else {
                     errorMessage = error.localizedDescription
                 }
-                
-                print("Get Mechanics List Error: \(errorMessage)")
                 DispatchQueue.main.async {
                     completion(.failure(DataServiceError.unknown(errorMessage)))
                 }

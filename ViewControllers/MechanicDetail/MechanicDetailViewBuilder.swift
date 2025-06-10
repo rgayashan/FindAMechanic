@@ -151,12 +151,9 @@ class MechanicDetailViewBuilder {
             return ""
         }
         
-        print("Debug - Formatting time string: '\(timeString)'")
-        
         // Split the time string into components
         let components = timeString.components(separatedBy: ":")
         guard components.count >= 2 else {
-            print("Debug - Invalid time format: '\(timeString)'")
             return timeString
         }
         
@@ -169,11 +166,8 @@ class MechanicDetailViewBuilder {
             let minutes = components[1]
             
             let formattedTime = String(format: "%d:%@ %@", hour12, minutes, period)
-            print("Debug - Formatted time: '\(formattedTime)'")
             return formattedTime
         }
-        
-        print("Debug - Could not parse hour from: '\(timeString)'")
         return timeString
     }
 } 

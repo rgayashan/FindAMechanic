@@ -18,7 +18,6 @@ class MechanicDetailTableDelegate: NSObject, UITableViewDelegate, UITableViewDat
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let count = viewController?.mechanic?.openingHours.count ?? 0
-        print("Number of opening hours rows: \(count)")
         return count
     }
     
