@@ -89,10 +89,14 @@ class APIService {
         
         urlComponents.queryItems = queryItems
         
-        guard let _ = urlComponents.url,
-              let request = createRequest(for: endpoint) else {
+        guard let url = urlComponents.url else {
             throw APIError.invalidURL
         }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue(authToken, forHTTPHeaderField: APIEndpoints.Headers.authorization)
+        request.addValue(APIEndpoints.Headers.jsonContentType, forHTTPHeaderField: APIEndpoints.Headers.accept)
         
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
