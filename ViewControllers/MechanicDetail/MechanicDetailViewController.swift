@@ -251,9 +251,17 @@ class MechanicDetailViewController: BaseViewController {
         phoneLabel.addGestureRecognizer(tapGesture)
     }
     
-    private func loadImage(from urlString: String?, into imageView: UIImageView) {
+    private func loadImage(from urlString: String?, into imageView: UIView) {
         guard let urlString = urlString else {
-            imageView.image = UIImage(named: "placeholder")
+            if let imageView = imageView as? UIImageView {
+                imageView.image = UIImage(named: "placeholder")
+            } else if imageView.tag == 100 { // Header container view
+                if let blurredImageView = imageView.viewWithTag(101) as? UIImageView,
+                   let originalImageView = imageView.viewWithTag(102) as? UIImageView {
+                    blurredImageView.image = UIImage(named: "placeholder")
+                    originalImageView.image = UIImage(named: "placeholder")
+                }
+            }
             return
         }
         
@@ -261,14 +269,38 @@ class MechanicDetailViewController: BaseViewController {
             URLSession.shared.dataTask(with: url) { data, _, _ in
                 if let data = data, let image = UIImage(data: data) {
                     DispatchQueue.main.async {
-                        imageView.image = image
+                        if let imageView = imageView as? UIImageView {
+                            imageView.image = image
+                        } else if imageView.tag == 100 { // Header container view
+                            if let blurredImageView = imageView.viewWithTag(101) as? UIImageView,
+                               let originalImageView = imageView.viewWithTag(102) as? UIImageView {
+                                blurredImageView.image = image
+                                originalImageView.image = image
+                            }
+                        }
                     }
                 }
             }.resume()
         } else if let data = Data(base64Encoded: urlString), let image = UIImage(data: data) {
-            imageView.image = image
+            if let imageView = imageView as? UIImageView {
+                imageView.image = image
+            } else if imageView.tag == 100 { // Header container view
+                if let blurredImageView = imageView.viewWithTag(101) as? UIImageView,
+                   let originalImageView = imageView.viewWithTag(102) as? UIImageView {
+                    blurredImageView.image = image
+                    originalImageView.image = image
+                }
+            }
         } else {
-            imageView.image = UIImage(named: "placeholder")
+            if let imageView = imageView as? UIImageView {
+                imageView.image = UIImage(named: "placeholder")
+            } else if imageView.tag == 100 { // Header container view
+                if let blurredImageView = imageView.viewWithTag(101) as? UIImageView,
+                   let originalImageView = imageView.viewWithTag(102) as? UIImageView {
+                    blurredImageView.image = UIImage(named: "placeholder")
+                    originalImageView.image = UIImage(named: "placeholder")
+                }
+            }
         }
     }
     

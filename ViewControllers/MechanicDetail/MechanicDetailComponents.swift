@@ -10,14 +10,59 @@ import UIKit
 import MapKit
 
 struct MechanicDetailComponents {
-    static func createHeaderImageView() -> UIImageView {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleToFill
-        imageView.clipsToBounds = true
-        imageView.layer.masksToBounds = true
-        imageView.backgroundColor = .systemGray6
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
+    static func createHeaderImageView() -> UIView {
+        let containerView = UIView()
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.clipsToBounds = true
+        
+        // Create the blurred background image view
+        let blurredImageView = UIImageView()
+        blurredImageView.contentMode = .scaleAspectFill
+        blurredImageView.clipsToBounds = true
+        blurredImageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Create the original image view
+        let originalImageView = UIImageView()
+        originalImageView.contentMode = .scaleAspectFit
+        originalImageView.clipsToBounds = true
+        originalImageView.translatesAutoresizingMaskIntoConstraints = false
+        originalImageView.backgroundColor = .clear
+        
+        // Add blur effect to the background image
+        let blurEffect = UIBlurEffect(style: .light)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Add views to container
+        containerView.addSubview(blurredImageView)
+        containerView.addSubview(blurEffectView)
+        containerView.addSubview(originalImageView)
+        
+        // Set up constraints
+        NSLayoutConstraint.activate([
+            blurredImageView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            blurredImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            blurredImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            blurredImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            
+            blurEffectView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            blurEffectView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            blurEffectView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            blurEffectView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            
+            originalImageView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            originalImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            originalImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            originalImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            originalImageView.heightAnchor.constraint(equalTo: originalImageView.widthAnchor, multiplier: 0.5625)
+        ])
+        
+        // Store references to both image views
+        containerView.tag = 100 // Use this tag to identify the container view
+        blurredImageView.tag = 101 // Use this tag to identify the blurred image view
+        originalImageView.tag = 102 // Use this tag to identify the original image view
+        
+        return containerView
     }
     
     static func createLogoImageView() -> UIImageView {

@@ -40,7 +40,7 @@ class MechanicDetailLayout {
     
     func setupContentConstraints(
         in contentView: UIView,
-        headerImageView: UIImageView,
+        headerImageView: UIView,
         logoImageView: UIImageView,
         nameLabel: UILabel,
         addressLabel: UILabel,
@@ -67,7 +67,7 @@ class MechanicDetailLayout {
             headerImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             headerImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             headerImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            headerImageView.heightAnchor.constraint(equalToConstant: 200),
+            headerImageView.heightAnchor.constraint(equalToConstant: 150),
             
             logoImageView.topAnchor.constraint(equalTo: headerImageView.bottomAnchor, constant: -40),
             logoImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
