@@ -179,6 +179,14 @@ class MechanicListViewController: BaseViewController {
     private func handleFetchResult(_ result: Result<[Mechanic], DataError>, forPage page: Int) {
         isLoading = false
         
+        // Always hide loading indicators first
+        if page == 1 {
+            LoadingIndicator.hide(animated: true)
+            tableHandler.endRefreshing()
+        } else {
+            hideLoadingIndicator()
+        }
+        
         switch result {
         case .success(let newMechanics):
             // If we get no items or fewer items than requested, we've reached the end
@@ -210,6 +218,12 @@ class MechanicListViewController: BaseViewController {
         }
     }
     
+    private func hideLoadingIndicator() {
+        tableView.tableFooterView = nil
+        tableHandler.endRefreshing()
+        LoadingIndicator.hide(animated: true)
+    }
+    
     // MARK: - UI Updates
     func updateSearchResults(_ filtered: [Mechanic]) {
         if isSearchActive && filtered.isEmpty {
@@ -236,12 +250,6 @@ class MechanicListViewController: BaseViewController {
         spinner.startAnimating()
         tableView.tableFooterView = spinner
     }
-    
-    private func hideLoadingIndicator() {
-        tableView.tableFooterView = nil
-        tableHandler.endRefreshing()
-    }
-    
     
     private func animateCellsAfterReload() {
         let visibleCells = tableView.visibleCells
