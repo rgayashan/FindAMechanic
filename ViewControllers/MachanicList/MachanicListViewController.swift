@@ -187,15 +187,8 @@ class MechanicListViewController: BaseViewController {
             if page == 1 {
                 mechanics = newMechanics
             } else {
-                // Only append new items if we haven't already loaded them
-                let existingIds = Set(mechanics.map { $0.id })
-                let newItems = newMechanics.filter { !existingIds.contains($0.id) }
-                mechanics.append(contentsOf: newItems)
-                
-                // If no new items were added, we've reached the end
-                if newItems.isEmpty {
-                    hasMoreData = false
-                }
+                // Append all items from the backend without filtering
+                mechanics.append(contentsOf: newMechanics)
             }
             
             if isSearchActive {
