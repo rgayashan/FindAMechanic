@@ -83,7 +83,7 @@ class MechanicDetailViewController: BaseViewController {
         inquiryButton.setTitle("Inquiry", for: .normal)
         inquiryButton.setTitleColor(.white, for: .normal)
         inquiryButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
-        inquiryButton.backgroundColor = .systemBlue
+        inquiryButton.backgroundColor = UIColor(named: "theme-light-bg")
         inquiryButton.layer.cornerRadius = 8
         inquiryButton.contentEdgeInsets = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
         inquiryButton.addTarget(self, action: #selector(inquiryButtonTapped), for: .touchUpInside)

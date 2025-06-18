@@ -35,7 +35,7 @@ class LoadingRefreshControl: UIRefreshControl {
         addSubview(loadingView)
         
         // Setup spinner
-        spinner.color = .systemBlue
+        spinner.color = UIColor(named: "theme-light-bg")
         spinner.hidesWhenStopped = false
         spinner.translatesAutoresizingMaskIntoConstraints = false
         loadingView.addSubview(spinner)

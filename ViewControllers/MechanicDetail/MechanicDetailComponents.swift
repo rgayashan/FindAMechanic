@@ -112,7 +112,7 @@ struct MechanicDetailComponents {
         label.text = title
         label.font = .systemFont(ofSize: 20, weight: .bold)
         label.textColor = .white
-        label.backgroundColor = UIColor(red: 0.25, green: 0.47, blue: 0.68, alpha: 1.0)
+        label.backgroundColor = UIColor(named: "theme-light-bg")
         label.textAlignment = .center
         label.layer.cornerRadius = 8
         label.layer.masksToBounds = true

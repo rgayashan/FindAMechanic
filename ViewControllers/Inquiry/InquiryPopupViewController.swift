@@ -31,7 +31,7 @@ class InquiryPopupViewController: BaseViewController {
     private let phoneNumberTextField = InquiryUIFactory.createTextField(placeholder: "Enter Phone Number", keyboardType: .phonePad)
     private let datePickerField = InquiryUIFactory.createTextField(placeholder: "Select Date")
     private let messageTextView = InquiryUIFactory.createMessageTextView()
-    private lazy var inquiryButton = InquiryUIFactory.createButton(title: "Inquiry", backgroundColor: .systemBlue, isEnabled: false)
+    private lazy var inquiryButton = InquiryUIFactory.createButton(title: "Inquiry", backgroundColor: UIColor(named: "theme-bg") ?? .systemBlue, isEnabled: false)
     private lazy var closeActionButton = InquiryUIFactory.createButton(title: "Close", backgroundColor: .systemGray)
     
     // MARK: - Lifecycle & Setup
