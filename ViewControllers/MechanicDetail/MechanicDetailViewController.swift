@@ -77,9 +77,20 @@ class MechanicDetailViewController: BaseViewController {
     private func setupNavigationBar() {
         navigationItem.largeTitleDisplayMode = .never
         let backButton = UIBarButtonItem(image: UIImage(systemName: "arrow.left"), style: .plain, target: self, action: #selector(backButtonTapped))
-        let inquareButton = UIBarButtonItem(title: "Inquiry", style: .plain, target: self, action: #selector(inquiryButtonTapped))
+        
+        // Create a more prominent Inquiry button
+        let inquiryButton = UIButton(type: .system)
+        inquiryButton.setTitle("Inquiry", for: .normal)
+        inquiryButton.setTitleColor(.white, for: .normal)
+        inquiryButton.backgroundColor = .systemBlue
+        inquiryButton.layer.cornerRadius = 8
+        inquiryButton.contentEdgeInsets = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
+        inquiryButton.addTarget(self, action: #selector(inquiryButtonTapped), for: .touchUpInside)
+        
+        let inquiryBarButton = UIBarButtonItem(customView: inquiryButton)
+        
         navigationItem.leftBarButtonItem = backButton
-        navigationItem.rightBarButtonItem = inquareButton
+        navigationItem.rightBarButtonItem = inquiryBarButton
     }
     
     private func setupComponents() {
