@@ -189,7 +189,7 @@ class MechanicDetailViewController: BaseViewController {
         title = mechanic.name
         nameLabel.text = mechanic.name
         addressLabel.text = mechanic.address
-        phoneLabel.text = "Phone: \(mechanic.phone)"
+        // phoneLabel.text = "Phone: \(mechanic.phone)"
         
         loadImage(from: mechanic.logo, into: logoImageView)
         loadImage(from: mechanic.bannerImage, into: headerImageView)

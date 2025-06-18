@@ -95,7 +95,7 @@ class MechanicTableViewCell: UITableViewCell {
         nameLabel.text = mechanic.name
         addressLine1Label.text = mechanic.addressLine1
         addressLine2Label.text = mechanic.addressLine2
-        phoneLabel.text = "Phone: \(mechanic.phone)"
+        // phoneLabel.text = "Phone: \(mechanic.phone)"
         
         if let logoUrl = mechanic.logoUrl {
             loadImage(from: logoUrl)
