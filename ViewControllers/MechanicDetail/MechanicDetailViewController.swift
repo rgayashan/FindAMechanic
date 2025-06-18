@@ -82,15 +82,26 @@ class MechanicDetailViewController: BaseViewController {
         let inquiryButton = UIButton(type: .system)
         inquiryButton.setTitle("Inquiry", for: .normal)
         inquiryButton.setTitleColor(.white, for: .normal)
+        inquiryButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         inquiryButton.backgroundColor = .systemBlue
         inquiryButton.layer.cornerRadius = 8
         inquiryButton.contentEdgeInsets = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
         inquiryButton.addTarget(self, action: #selector(inquiryButtonTapped), for: .touchUpInside)
         
+        // Add animation to inquiry button
+        inquiryButton.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+        inquiryButton.alpha = 0.0
+        
         let inquiryBarButton = UIBarButtonItem(customView: inquiryButton)
         
         navigationItem.leftBarButtonItem = backButton
         navigationItem.rightBarButtonItem = inquiryBarButton
+        
+        // Animate the inquiry button
+        UIView.animate(withDuration: 0.6, delay: 0.3, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: .curveEaseOut) {
+            inquiryButton.transform = .identity
+            inquiryButton.alpha = 1.0
+        }
     }
     
     private func setupComponents() {
