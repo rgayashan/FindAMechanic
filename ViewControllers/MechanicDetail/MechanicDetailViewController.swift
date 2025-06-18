@@ -80,12 +80,25 @@ class MechanicDetailViewController: BaseViewController {
         
         // Create a more prominent Inquiry button
         let inquiryButton = UIButton(type: .system)
-        inquiryButton.setTitle("Inquiry", for: .normal)
-        inquiryButton.setTitleColor(.white, for: .normal)
-        inquiryButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
-        inquiryButton.backgroundColor = UIColor(named: "theme-light-bg")
-        inquiryButton.layer.cornerRadius = 8
-        inquiryButton.contentEdgeInsets = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
+        
+        if #available(iOS 15.0, *) {
+            var config = UIButton.Configuration.filled()
+            config.title = "Inquiry"
+            config.baseForegroundColor = .white
+            config.baseBackgroundColor = UIColor(named: "theme-light-bg")
+            config.cornerStyle = .medium
+            config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
+            inquiryButton.configuration = config
+        } else {
+            // Fallback for iOS 14 and below
+            inquiryButton.setTitle("Inquiry", for: .normal)
+            inquiryButton.setTitleColor(.white, for: .normal)
+            inquiryButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+            inquiryButton.backgroundColor = UIColor(named: "theme-light-bg")
+            inquiryButton.layer.cornerRadius = 8
+            inquiryButton.contentEdgeInsets = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
+        }
+        
         inquiryButton.addTarget(self, action: #selector(inquiryButtonTapped), for: .touchUpInside)
         
         // Add animation to inquiry button
