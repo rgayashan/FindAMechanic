@@ -227,14 +227,17 @@ class MechanicDetailViewController: BaseViewController {
         }
         
         // Areas section
-        if mechanic.servicingAreas.isEmpty {
-            areasHeaderLabel.isHidden = true
-            areasStackView.isHidden = true
-        } else {
-            areasHeaderLabel.isHidden = false
-            areasStackView.isHidden = false
-            updateAreas(mechanic.servicingAreas)
-        }
+        // if mechanic.servicingAreas.isEmpty {
+        //     areasHeaderLabel.isHidden = true
+        //     areasStackView.isHidden = true
+        // } else {
+        //     areasHeaderLabel.isHidden = false
+        //     areasStackView.isHidden = false
+        //     updateAreas(mechanic.servicingAreas)
+        // }
+        // Areas section - Always hidden
+        areasHeaderLabel.isHidden = true
+        areasStackView.isHidden = true
         
         // Hours section
         if mechanic.openingHours.isEmpty {
